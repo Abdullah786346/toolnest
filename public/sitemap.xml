@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://toolnest.example/</loc></url>
+  <url><loc>https://toolnest.example/popular</loc></url>
+  <url><loc>https://toolnest.example/pakistan</loc></url>
+  <url><loc>https://toolnest.example/category/pdf-tools</loc></url>
+  <url><loc>https://toolnest.example/category/image-tools</loc></url>
+  <url><loc>https://toolnest.example/category/text-tools</loc></url>
+  <url><loc>https://toolnest.example/category/calculator-tools</loc></url>
+  <url><loc>https://toolnest.example/category/developer-tools</loc></url>
+  <url><loc>https://toolnest.example/about</loc></url>
+  <url><loc>https://toolnest.example/contact</loc></url>
+  <url><loc>https://toolnest.example/privacy</loc></url>
+  <url><loc>https://toolnest.example/terms</loc></url>
+  <url><loc>https://toolnest.example/disclaimer</loc></url>
+</urlset>

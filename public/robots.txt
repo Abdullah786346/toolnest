@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://toolnest.example/sitemap.xml
