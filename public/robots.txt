@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://onlinetoolnest.tech/sitemap.xml
+Sitemap: https://www.onlinetoolnest.tech/sitemap.xml

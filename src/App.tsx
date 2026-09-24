@@ -5,7 +5,7 @@ import { categories, pakistanGuides, providers, tools, type Tool } from './data'
 import './App.css'
 
 type ToolState = { input: string; output: string; error: string }
-const SITE_URL = 'https://onlinetoolnest.tech'
+const SITE_URL = 'https://www.onlinetoolnest.tech'
 const slugify = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
 const toolBySlug = (slug: string) => tools.find((item) => item.slug === slug)
 
@@ -18,14 +18,12 @@ function App() {
     const category = categories.find((item) => `/category/${item.slug}` === route)
     const title = current?.seoTitle || category ? current?.seoTitle || `${category?.name} | Free Online Tools | ToolNest` : route === '/popular' ? 'Popular Free Online Tools | ToolNest' : route === '/pakistan' ? 'Pakistan Utility Guides | ToolNest' : route === '/about' ? 'About ToolNest' : 'ToolNest | Free Online Tools, PDF Tools & Pakistan Utility Guides'
     const description = current?.seoDescription || category ? current?.seoDescription || `Browse free ${category?.name.toLowerCase()} for fast, practical work online. No registration required with ToolNest.` : route === '/popular' ? 'Use ToolNest popular free online tools for PDF, text, image, calculator, and developer tasks.' : 'Free online tools for PDF, image, text, calculator, and developer tasks. Explore Pakistan utility guides for Telenor, Jazz, Zong, and Ufone.'
-    const keywords = current ? `${current.name}, ${current.category}, free online ${current.name.toLowerCase()}, ToolNest, ${current.name.toLowerCase()} tool` : 'free online tools, PDF tools, image compressor, word counter, text tools, calculator tools, developer tools, JSON formatter, Pakistan utility guides, Telenor balance check, Jazz package check, Zong internet settings, Ufone codes, ToolNest'
     const ogTitle = current ? `${current.name} | ToolNest` : 'ToolNest | Free Online Tools, PDF Tools & Pakistan Utility Guides'
     const ogDescription = current ? current.seoDescription : 'Free online tools for PDF, image, text, calculator, and developer work, plus Pakistan utility guides for telecom checks.'
 
     document.title = title
 
     const metaDescription = document.querySelector('meta[name="description"]'); if (metaDescription) metaDescription.setAttribute('content', description)
-    const metaKeywords = document.querySelector('meta[name="keywords"]'); if (metaKeywords) metaKeywords.setAttribute('content', keywords)
     const metaOgTitle = document.querySelector('meta[property="og:title"]'); if (metaOgTitle) metaOgTitle.setAttribute('content', ogTitle)
     const metaOgDescription = document.querySelector('meta[property="og:description"]'); if (metaOgDescription) metaOgDescription.setAttribute('content', ogDescription)
     const metaTwitterTitle = document.querySelector('meta[name="twitter:title"]'); if (metaTwitterTitle) metaTwitterTitle.setAttribute('content', ogTitle)
@@ -55,10 +53,30 @@ function App() {
       }
     }))
 
+    const breadcrumbLabels = route === '/'
+      ? []
+      : route.startsWith('/tools/')
+        ? ['Home', current?.name || 'Tool']
+        : route.startsWith('/category/')
+          ? ['Home', category?.name || 'Category']
+          : route.startsWith('/pakistan')
+            ? ['Home', 'Pakistan utilities']
+            : ['Home', title]
+    const breadcrumbList = breadcrumbLabels.length > 0 ? {
+      '@type': 'BreadcrumbList',
+      itemListElement: breadcrumbLabels.map((label, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: label,
+        item: `${SITE_URL}${index === 0 ? '/' : route}`
+      }))
+    } : null
+
     const schema = {
       '@context': 'https://schema.org',
       '@graph': [
         { '@type': 'WebSite', name: 'ToolNest', url: `${SITE_URL}/` },
+        ...(breadcrumbList ? [breadcrumbList] : []),
         {
           '@type': current ? 'WebPage' : 'CollectionPage',
           name: title,
