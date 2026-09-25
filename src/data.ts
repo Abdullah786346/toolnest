@@ -15,7 +15,7 @@ export type Tool = {
 }
 
 export const categories = [
-  { name: 'PDF Tools', slug: 'pdf-tools', icon: FileText, count: 5, tone: 'coral' },
+  { name: 'PDF Tools', slug: 'pdf-tools', icon: FileText, count: 6, tone: 'coral' },
   { name: 'Image Tools', slug: 'image-tools', icon: Image, count: 6, tone: 'cyan' },
   { name: 'Text Tools', slug: 'text-tools', icon: Type, count: 6, tone: 'violet' },
   { name: 'Calculator Tools', slug: 'calculator-tools', icon: Calculator, count: 6, tone: 'lime' },
@@ -23,13 +23,14 @@ export const categories = [
   { name: 'Pakistan Utilities', slug: 'pakistan', icon: Wifi, count: 32, tone: 'yellow' },
 ]
 
-const tool = (name: string, slug: string, category: string, description: string, icon: Tool['icon'], popular = false): Tool => ({
+const tool = (name: string, slug: string, category: string, description: string, icon: Tool['icon'], popular = false, customSeoTitle?: string, customSeoDesc?: string): Tool => ({
   name, slug, category, description, icon, popular,
-  seoTitle: `${name} - Free Online Tool | ToolNest | ${category}`,
-  seoDescription: `${description} Use the ${name} tool online for free on ToolNest with no registration required. Fast, private, and optimized for everyday work.`,
+  seoTitle: customSeoTitle || `${name} - Free Online Tool | ToolNest | ${category}`,
+  seoDescription: customSeoDesc || `${description} Use the ${name} tool online for free on ToolNest with no registration required. Fast, private, and optimized for everyday work.`,
 })
 
 export const tools: Tool[] = [
+  tool('PDF to PPT Converter', 'pdf-to-ppt', 'PDF Tools', 'Convert PDF to PPT online for free. Transform PDF documents into editable Microsoft PowerPoint presentations (.pptx) instantly in your browser.', FileText, true, 'PDF to PPT Converter - Free Online PDF to PowerPoint | ToolNest', 'Convert PDF to PPT online for free with ToolNest. Turn PDF files into editable Microsoft PowerPoint (PPT/PPTX) presentations instantly in your browser. Fast, secure, 100% free.'),
   tool('PDF Compressor', 'pdf-compressor', 'PDF Tools', 'Reduce PDF file size while keeping documents easy to share.', FileText, true),
   tool('PDF Merger', 'pdf-merger', 'PDF Tools', 'Combine multiple PDF files into one organized document.', FileText),
   tool('PDF Splitter', 'pdf-splitter', 'PDF Tools', 'Extract pages from a PDF with a simple browser workflow.', FileText),

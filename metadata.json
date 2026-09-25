@@ -1,0 +1,7 @@
+{
+  "name": "ToolNest | Free Online Tools, PDF Tools & Pakistan Utility Guides",
+  "description": "ToolNest offers free online tools for PDF, image, text, calculator, and developer tasks, plus Pakistan utility guides for Telenor, Jazz, Zong, and Ufone.",
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
