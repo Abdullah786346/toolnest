@@ -1,5 +1,5 @@
 import {
-  Braces, Calculator, Code2, FileImage, FileText, Image, KeyRound, Languages, LockKeyhole, Percent, ScanText, Scale, ShieldCheck, Sparkles, TextCursorInput, Type, WandSparkles, Wifi,
+  Braces, Calculator, Code2, FileImage, FileText, Image, KeyRound, Languages, LockKeyhole, Percent, ScanText, Scale, ShieldCheck, Sparkles, TextCursorInput, Type, WandSparkles, Wifi, Palette, FileCode,
 } from 'lucide-react'
 import type { ComponentType } from 'react'
 
@@ -17,9 +17,9 @@ export type Tool = {
 export const categories = [
   { name: 'PDF Tools', slug: 'pdf-tools', icon: FileText, count: 6, tone: 'coral' },
   { name: 'Image Tools', slug: 'image-tools', icon: Image, count: 6, tone: 'cyan' },
-  { name: 'Text Tools', slug: 'text-tools', icon: Type, count: 6, tone: 'violet' },
+  { name: 'Text Tools', slug: 'text-tools', icon: Type, count: 7, tone: 'violet' },
   { name: 'Calculator Tools', slug: 'calculator-tools', icon: Calculator, count: 6, tone: 'lime' },
-  { name: 'Developer Tools', slug: 'developer-tools', icon: Code2, count: 6, tone: 'blue' },
+  { name: 'Developer Tools', slug: 'developer-tools', icon: Code2, count: 7, tone: 'blue' },
   { name: 'Pakistan Utilities', slug: 'pakistan', icon: Wifi, count: 32, tone: 'yellow' },
 ]
 
@@ -48,6 +48,7 @@ export const tools: Tool[] = [
   tool('Remove Duplicate Lines', 'remove-duplicate-lines', 'Text Tools', 'Clean repeated lines from lists and pasted text.', Sparkles),
   tool('Text Sorter', 'text-sorter', 'Text Tools', 'Sort lines alphabetically for cleaner lists.', Scale),
   tool('Lorem Ipsum Generator', 'lorem-ipsum-generator', 'Text Tools', 'Generate placeholder copy for designs and prototypes.', Type),
+  tool('Markdown Editor & Preview', 'markdown-editor', 'Text Tools', 'Live Markdown editor with HTML preview and download options.', FileCode, true),
   tool('Percentage Calculator', 'percentage-calculator', 'Calculator Tools', 'Calculate percentages, increases, decreases, and differences.', Percent, true),
   tool('Age Calculator', 'age-calculator', 'Calculator Tools', 'Find an exact age from a date of birth.', Calculator),
   tool('BMI Calculator', 'bmi-calculator', 'Calculator Tools', 'Calculate body mass index from height and weight.', Calculator),
@@ -60,6 +61,7 @@ export const tools: Tool[] = [
   tool('URL Encoder / Decoder', 'url-encoder-decoder', 'Developer Tools', 'Encode or decode URLs safely for web development.', Code2),
   tool('UUID Generator', 'uuid-generator', 'Developer Tools', 'Generate random UUIDs for apps, APIs, and databases.', KeyRound),
   tool('Password Generator', 'password-generator', 'Developer Tools', 'Create strong random passwords with adjustable options.', ShieldCheck, true),
+  tool('Color Code Converter', 'color-converter', 'Developer Tools', 'Convert colors between HEX, RGB, HSL, and CSS formats.', Palette),
 ]
 
 export const pakistanGuides = ['Balance check', 'Internet MB check', 'Number check', 'Package information', 'App guides', 'Codes', 'Internet settings', 'Customer support']

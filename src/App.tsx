@@ -5,6 +5,9 @@ import { categories, pakistanGuides, providers, tools, type Tool } from './data'
 import { ToolDispatcher } from './components/tools/ToolDispatcher'
 import { PdfToPptArticle } from './components/seo/PdfToPptArticle'
 import { getToolFaqs } from './data/toolFaqs'
+import { ToastProvider } from './components/common/Toast'
+import { CommandPalette } from './components/common/CommandPalette'
+import { ToolFeedback } from './components/common/ToolFeedback'
 import './App.css'
 
 const SITE_URL = 'https://www.onlinetoolnest.tech'
@@ -14,7 +17,19 @@ const toolBySlug = (slug: string) => tools.find((item) => item.slug === slug)
 function App() {
   const [dark, setDark] = useState(() => localStorage.getItem('toolnest-theme') === 'dark')
   const [menu, setMenu] = useState(false)
+  const [cmdOpen, setCmdOpen] = useState(false)
   const route = useLocation().pathname
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault()
+        setCmdOpen((prev) => !prev)
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
 
   useEffect(() => {
     document.documentElement.dataset.theme = dark ? 'dark' : 'light'
@@ -215,41 +230,49 @@ function App() {
   else if (['/about', '/contact', '/privacy', '/terms', '/disclaimer', '/sitemap'].includes(route)) page = <InfoPage path={route} />
 
   return (
-    <div className="app-shell">
-      <header className="site-header">
-        <div className="header-inner">
-          <Link to="/" className="brand">
-            <span className="brand-mark"><Sparkles size={18} /></span>
-            tool<span>nest</span>
-          </Link>
-          <nav className={`main-nav ${menu ? 'open' : ''}`}>
-            <Link to="/">All Tools</Link>
-            <Link to="/tools/pdf-to-ppt">PDF to PPT</Link>
-            <Link to="/category/pdf-tools">PDF Tools</Link>
-            <Link to="/pakistan">Pakistan</Link>
-            <Link to="/popular">Popular</Link>
-            <Link to="/about">About</Link>
-          </nav>
-          <div className="header-actions">
-            <Link to="/" className="header-search">
-              <Search size={18} />
-              <span>Search tools</span>
-              <kbd>⌘ K</kbd>
+    <ToastProvider>
+      <div className="app-shell">
+        <header className="site-header">
+          <div className="header-inner">
+            <Link to="/" className="brand">
+              <span className="brand-mark"><Sparkles size={18} /></span>
+              tool<span>nest</span>
             </Link>
-            <button className="icon-btn" onClick={() => setDark(!dark)} aria-label="Toggle theme">
-              {dark ? <Sun size={19} /> : <Moon size={19} />}
-            </button>
-            <button className="icon-btn menu-btn" onClick={() => setMenu(!menu)} aria-label="Menu">
-              {menu ? <X size={22} /> : <Menu size={22} />}
-            </button>
+            <nav className={`main-nav ${menu ? 'open' : ''}`}>
+              <Link to="/">All Tools</Link>
+              <Link to="/tools/pdf-to-ppt">PDF to PPT</Link>
+              <Link to="/category/pdf-tools">PDF Tools</Link>
+              <Link to="/pakistan">Pakistan</Link>
+              <Link to="/popular">Popular</Link>
+              <Link to="/about">About</Link>
+            </nav>
+            <div className="header-actions">
+              <button
+                type="button"
+                className="header-search-btn"
+                onClick={() => setCmdOpen(true)}
+                aria-label="Search tools"
+              >
+                <Search size={18} />
+                <span>Search tools...</span>
+                <kbd>⌘ K</kbd>
+              </button>
+              <button className="icon-btn" onClick={() => setDark(!dark)} aria-label="Toggle theme">
+                {dark ? <Sun size={19} /> : <Moon size={19} />}
+              </button>
+              <button className="icon-btn menu-btn" onClick={() => setMenu(!menu)} aria-label="Menu">
+                {menu ? <X size={22} /> : <Menu size={22} />}
+              </button>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      <main>{page}</main>
+        <main>{page}</main>
 
-      <Footer />
-    </div>
+        <Footer />
+        <CommandPalette isOpen={cmdOpen} onClose={() => setCmdOpen(false)} />
+      </div>
+    </ToastProvider>
   )
 }
 
@@ -509,6 +532,9 @@ function ToolContent({ tool }: { tool: Tool }) {
 
           {/* Interactive functional component */}
           <ToolDispatcher tool={tool} />
+
+          {/* Tool Feedback & Bookmark bar */}
+          <ToolFeedback toolSlug={tool.slug} toolName={tool.name} />
 
           {/* SEO Rich content */}
           {isPdfToPpt ? <PdfToPptArticle /> : <ArticleContent tool={tool} />}
