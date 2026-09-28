@@ -102,9 +102,9 @@ main {
 .main-nav {
   display: flex;
   gap: 28px;
-  font-size: 15px;
+  font-size: 17px;
   color: var(--muted);
-  font-weight: 600;
+  font-weight: 700;
   flex: 1;
 }
 

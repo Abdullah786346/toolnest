@@ -242,6 +242,7 @@ function App() {
               <Link to="/">All Tools</Link>
               <Link to="/tools/pdf-to-ppt">PDF to PPT</Link>
               <Link to="/category/pdf-tools">PDF Tools</Link>
+              <Link to="/category/calculator-tools">Calculators</Link>
               <Link to="/pakistan">Pakistan</Link>
               <Link to="/popular">Popular</Link>
               <Link to="/about">About</Link>
