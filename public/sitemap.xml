@@ -2,19 +2,17 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://www.onlinetoolnest.tech/</loc></url>
   <url><loc>https://www.onlinetoolnest.tech/popular</loc></url>
-  <url><loc>https://www.onlinetoolnest.tech/pakistan</loc></url>
-  <url><loc>https://www.onlinetoolnest.tech/pakistan/telenor/quiz-today</loc></url>
-  <url><loc>https://www.onlinetoolnest.tech/category/pdf-tools</loc></url>
-  <url><loc>https://www.onlinetoolnest.tech/category/image-tools</loc></url>
-  <url><loc>https://www.onlinetoolnest.tech/category/text-tools</loc></url>
-  <url><loc>https://www.onlinetoolnest.tech/category/calculator-tools</loc></url>
-  <url><loc>https://www.onlinetoolnest.tech/category/developer-tools</loc></url>
   <url><loc>https://www.onlinetoolnest.tech/about</loc></url>
   <url><loc>https://www.onlinetoolnest.tech/contact</loc></url>
   <url><loc>https://www.onlinetoolnest.tech/privacy</loc></url>
   <url><loc>https://www.onlinetoolnest.tech/terms</loc></url>
   <url><loc>https://www.onlinetoolnest.tech/disclaimer</loc></url>
   <url><loc>https://www.onlinetoolnest.tech/sitemap</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/category/pdf-tools</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/category/image-tools</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/category/text-tools</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/category/calculator-tools</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/category/developer-tools</loc></url>
   <url><loc>https://www.onlinetoolnest.tech/tools/pdf-to-ppt</loc></url>
   <url><loc>https://www.onlinetoolnest.tech/tools/pdf-compressor</loc></url>
   <url><loc>https://www.onlinetoolnest.tech/tools/pdf-merger</loc></url>
@@ -33,6 +31,7 @@
   <url><loc>https://www.onlinetoolnest.tech/tools/remove-duplicate-lines</loc></url>
   <url><loc>https://www.onlinetoolnest.tech/tools/text-sorter</loc></url>
   <url><loc>https://www.onlinetoolnest.tech/tools/lorem-ipsum-generator</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/tools/markdown-editor</loc></url>
   <url><loc>https://www.onlinetoolnest.tech/tools/percentage-calculator</loc></url>
   <url><loc>https://www.onlinetoolnest.tech/tools/age-calculator</loc></url>
   <url><loc>https://www.onlinetoolnest.tech/tools/bmi-calculator</loc></url>
@@ -45,4 +44,43 @@
   <url><loc>https://www.onlinetoolnest.tech/tools/url-encoder-decoder</loc></url>
   <url><loc>https://www.onlinetoolnest.tech/tools/uuid-generator</loc></url>
   <url><loc>https://www.onlinetoolnest.tech/tools/password-generator</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/tools/color-converter</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/telenor</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/jazz</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/zong</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/ufone</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/telenor/quiz-today</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/telenor/balance-check</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/telenor/internet-mb-check</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/telenor/number-check</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/telenor/package-information</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/telenor/app-guides</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/telenor/codes</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/telenor/internet-settings</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/telenor/customer-support</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/jazz/balance-check</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/jazz/internet-mb-check</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/jazz/number-check</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/jazz/package-information</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/jazz/app-guides</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/jazz/codes</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/jazz/internet-settings</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/jazz/customer-support</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/zong/balance-check</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/zong/internet-mb-check</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/zong/number-check</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/zong/package-information</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/zong/app-guides</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/zong/codes</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/zong/internet-settings</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/zong/customer-support</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/ufone/balance-check</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/ufone/internet-mb-check</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/ufone/number-check</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/ufone/package-information</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/ufone/app-guides</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/ufone/codes</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/ufone/internet-settings</loc></url>
+  <url><loc>https://www.onlinetoolnest.tech/pakistan/ufone/customer-support</loc></url>
 </urlset>

@@ -1,13 +1,17 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { ArrowRight, Check, ChevronDown, FileSearch, Menu, Moon, Search, ShieldCheck, Sparkles, Sun, X } from 'lucide-react'
-import { categories, pakistanGuides, providers, tools, type Tool } from './data'
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { ArrowRight, Check, ChevronDown, FileSearch, Menu, Moon, Search, ShieldCheck, Sparkles, Sun, X, Smartphone } from 'lucide-react'
+import { categories, providers, tools, type Tool } from './data'
+import { PROVIDERS, GUIDE_TYPES, getGuideDetail } from './data/pakistanGuidesData'
 import { ToolDispatcher } from './components/tools/ToolDispatcher'
 import { PdfToPptArticle } from './components/seo/PdfToPptArticle'
+import { ToolArticle } from './components/seo/ToolArticle'
 import { getToolFaqs } from './data/toolFaqs'
 import { ToastProvider } from './components/common/Toast'
 import { CommandPalette } from './components/common/CommandPalette'
 import { ToolFeedback } from './components/common/ToolFeedback'
+import { PakistanGuidePage } from './components/guides/PakistanGuidePage'
+import { AboutPage, ContactPage, DisclaimerPage, PrivacyPolicyPage, SitemapPage, TermsPage } from './components/legal/LegalPages'
 import './App.css'
 
 const SITE_URL = 'https://www.onlinetoolnest.tech'
@@ -18,7 +22,10 @@ function App() {
   const [dark, setDark] = useState(() => localStorage.getItem('toolnest-theme') === 'dark')
   const [menu, setMenu] = useState(false)
   const [cmdOpen, setCmdOpen] = useState(false)
-  const route = useLocation().pathname
+  const location = useLocation()
+  const route = location.pathname
+  const [searchParams] = useSearchParams()
+  const searchQueryParam = searchParams.get('q') || ''
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -36,166 +43,131 @@ function App() {
     localStorage.setItem('toolnest-theme', dark ? 'dark' : 'light')
   }, [dark])
 
+  // Scroll to top on route change
   useEffect(() => {
-    const current = toolBySlug(route.split('/')[2])
-    const category = categories.find((item) => `/category/${item.slug}` === route)
+    window.scrollTo(0, 0)
+    setMenu(false)
+  }, [route, searchQueryParam])
+
+  // SEO & Dynamic Metadata Effect
+  useEffect(() => {
+    const parts = route.split('/').filter(Boolean)
+    const currentTool = parts[0] === 'tools' ? toolBySlug(parts[1]) : null
+    const category = parts[0] === 'category' ? categories.find((item) => item.slug === parts[1]) : null
+
+    const isPakistanSpecificGuide = parts[0] === 'pakistan' && parts[1] && parts[1] !== 'telenor' || (parts[1] === 'telenor' && parts[2] !== 'quiz-today' && parts.length === 3)
     const isTelenorQuiz = route === '/pakistan/telenor/quiz-today'
-    const isPdfToPpt = current?.slug === 'pdf-to-ppt'
+    const isPdfToPpt = currentTool?.slug === 'pdf-to-ppt'
+    const isSearchRoute = route === '/search' || Boolean(searchQueryParam)
 
-    const title = isPdfToPpt
-      ? 'PDF to PPT Converter - Free Online PDF to PowerPoint | ToolNest'
-      : isTelenorQuiz
-      ? 'My Telenor App Question Today: Quiz Answers | ToolNest'
-      : current?.seoTitle || (category ? `${category?.name} | Free Online Tools | ToolNest` : route === '/popular' ? 'Popular Free Online Tools | ToolNest' : route === '/pakistan' ? 'Pakistan Utility Guides | ToolNest' : route === '/about' ? 'About ToolNest' : 'ToolNest | Free Online Tools, PDF to PPT & Utility Guides')
+    let title = 'ToolNest | Free Online Tools, PDF to PPT & Utility Guides'
+    let description = 'Free online tools for PDF to PPT converter, image compressor, word counter, percentage calculator, and developer tasks, plus Pakistan utility guides.'
+    let keywords = 'pdf to ppt, free online tools, pdf tools, image compressor, word counter, json formatter, percentage calculator'
 
-    const description = isPdfToPpt
-      ? 'Convert PDF to PPT online for free with ToolNest. Turn PDF documents into editable Microsoft PowerPoint (PPT/PPTX) presentations instantly in your browser. Fast, secure, 100% free.'
-      : isTelenorQuiz
-      ? 'Looking for the My Telenor app question today? See the reported quiz answers for 24 September 2026, how to access the daily quiz, and reward guidance.'
-      : current?.seoDescription || (category ? `Browse free ${category?.name.toLowerCase()} for fast, practical work online. No registration required with ToolNest.` : route === '/popular' ? 'Use ToolNest popular free online tools for PDF to PPT, text, image, calculator, and developer tasks.' : 'Free online tools for PDF to PPT converter, image compressor, word counter, calculator, and developer tasks, plus Pakistan utility guides.')
-
-    const ogTitle = current ? current.seoTitle || `${current.name} | ToolNest` : 'ToolNest | Free Online Tools, PDF to PPT & Pakistan Utility Guides'
-    const ogDescription = current ? current.seoDescription : 'Free online tools for PDF to PPT, PDF compression, image resize, text utilities, and Pakistan telecom checks.'
+    if (isSearchRoute) {
+      title = `Search Results for "${searchQueryParam}" | ToolNest`
+      description = `Find free online tools, converters, calculators, and Pakistan utility guides matching "${searchQueryParam}" on ToolNest.`
+    } else if (isPdfToPpt) {
+      title = 'PDF to PPT Converter - Free Online PDF to PowerPoint | ToolNest'
+      description = 'Convert PDF to PPT online for free with ToolNest. Turn PDF documents into editable Microsoft PowerPoint (PPT/PPTX) presentations instantly in your browser.'
+      keywords = 'pdf to ppt, pdf to ppt converter, convert pdf to ppt, pdf to powerpoint, pdf to pptx, free pdf to ppt converter'
+    } else if (currentTool) {
+      title = currentTool.seoTitle
+      description = currentTool.seoDescription
+    } else if (category) {
+      title = `${category.name} | Free Online Tools | ToolNest`
+      description = `Browse free ${category.name.toLowerCase()} for fast, practical work online. Private, browser-based tools with no registration required.`
+    } else if (isTelenorQuiz) {
+      title = 'My Telenor App Question Today: Quiz Answers | ToolNest'
+      description = 'Looking for the My Telenor app question today? See reported quiz answers, access steps, and reward guidance.'
+    } else if (isPakistanSpecificGuide) {
+      const guideObj = getGuideDetail(parts[1], parts[2] || 'balance-check')
+      title = guideObj.seoTitle
+      description = guideObj.seoDescription
+    } else if (parts[0] === 'pakistan') {
+      const providerName = parts[1] ? parts[1].toUpperCase() : 'Pakistan'
+      title = `${providerName} Telecom Utility Guides | ToolNest`
+      description = `Useful telecom guides for ${providerName} balance checks, internet MBs, SIM ownership, and USSD codes.`
+    } else if (route === '/popular') {
+      title = 'Popular Free Online Tools | ToolNest'
+      description = 'Use ToolNest popular free online tools for PDF to PPT, text, image, calculator, and developer tasks.'
+    } else if (route === '/about') {
+      title = 'About ToolNest - Fast, Private Online Utilities'
+      description = 'ToolNest is an independent digital toolbox providing high-performance browser utilities and verified Pakistan telecom guides.'
+    } else if (route === '/contact') {
+      title = 'Contact ToolNest - Support & Feedback'
+      description = 'Contact ToolNest team for feedback, feature suggestions, bug reports, or partnership inquiries.'
+    } else if (route === '/privacy') {
+      title = 'Privacy Policy | ToolNest'
+      description = 'ToolNest Privacy Policy. Learn about our browser local storage privacy model and Google AdSense cookie guidelines.'
+    } else if (route === '/terms') {
+      title = 'Terms of Service | ToolNest'
+      description = 'Terms of Service governing the use of ToolNest free online tools and utility guides.'
+    } else if (route === '/disclaimer') {
+      title = 'Legal & Telecom Disclaimer | ToolNest'
+      description = 'ToolNest legal disclaimer regarding telecom guides and browser-based utility tools.'
+    } else if (route === '/sitemap') {
+      title = 'HTML Sitemap | ToolNest'
+      description = 'Complete directory of all 70+ online tools, categories, and Pakistan utility guides on ToolNest.'
+    }
 
     document.title = title
 
-    const metaDescription = document.querySelector('meta[name="description"]')
-    if (metaDescription) metaDescription.setAttribute('content', description)
+    const metaDescElem = document.querySelector('meta[name="description"]')
+    if (metaDescElem) metaDescElem.setAttribute('content', description)
 
-    const metaKeywords = document.querySelector('meta[name="keywords"]')
-    if (metaKeywords) {
-      if (isPdfToPpt) {
-        metaKeywords.setAttribute('content', 'pdf to ppt, pdf to ppt converter, convert pdf to ppt, pdf to powerpoint, pdf to pptx, online pdf to ppt converter, free pdf to ppt converter, pdf into ppt')
-      } else {
-        metaKeywords.setAttribute('content', 'pdf to ppt, free online tools, pdf tools, image compressor, word counter, json formatter, percentage calculator')
-      }
-    }
+    const metaKwElem = document.querySelector('meta[name="keywords"]')
+    if (metaKwElem) metaKwElem.setAttribute('content', keywords)
+
+    const canonicalElem = document.querySelector('link[rel="canonical"]')
+    if (canonicalElem) canonicalElem.setAttribute('href', `${SITE_URL}${route}${searchQueryParam ? `?q=${encodeURIComponent(searchQueryParam)}` : ''}`)
 
     const metaOgTitle = document.querySelector('meta[property="og:title"]')
-    if (metaOgTitle) metaOgTitle.setAttribute('content', ogTitle)
+    if (metaOgTitle) metaOgTitle.setAttribute('content', title)
 
-    const metaOgDescription = document.querySelector('meta[property="og:description"]')
-    if (metaOgDescription) metaOgDescription.setAttribute('content', ogDescription)
+    const metaOgDesc = document.querySelector('meta[property="og:description"]')
+    if (metaOgDesc) metaOgDesc.setAttribute('content', description)
 
-    const metaTwitterTitle = document.querySelector('meta[name="twitter:title"]')
-    if (metaTwitterTitle) metaTwitterTitle.setAttribute('content', ogTitle)
+    const metaOgUrl = document.querySelector('meta[property="og:url"]')
+    if (metaOgUrl) metaOgUrl.setAttribute('content', `${SITE_URL}${route}`)
 
-    const metaTwitterDescription = document.querySelector('meta[name="twitter:description"]')
-    if (metaTwitterDescription) metaTwitterDescription.setAttribute('content', ogDescription)
-
-    const canonical = document.querySelector('link[rel="canonical"]')
-    if (canonical) canonical.setAttribute('href', `${SITE_URL}${route || '/'}`)
-
+    // Schema.org Graph
     const faqEntries = isTelenorQuiz
       ? [
           { question: 'How do I find the My Telenor daily quiz?', answer: 'Open the official My Telenor app, sign in with your Telenor number, then look for Play and Win or Test Your Skills.' },
-          { question: 'How many questions are in the quiz?', answer: 'The daily quiz commonly presents five multiple-choice questions, but the format and reward can change.' },
-          { question: 'Are these answers guaranteed by Telenor?', answer: 'No. This independent guide reports answers for convenience. Confirm each question and reward in the official My Telenor app before submitting.' }
+          { question: 'Are these answers guaranteed by Telenor?', answer: 'No. This independent guide reports answers for convenience. Confirm each question in the official app.' }
         ]
-      : current
-      ? getToolFaqs(current)
+      : currentTool
+      ? getToolFaqs(currentTool)
       : [
-          { question: 'Are the tools on ToolNest free?', answer: 'Yes. ToolNest offers free online tools including PDF to PPT converter, image tools, text counters, and calculators without subscription fees.' },
-          { question: 'Does ToolNest require an account or registration?', answer: 'No. Every tool is available immediately without signing in or providing an email address.' },
-          { question: 'Does ToolNest include Pakistan utility guides?', answer: 'Yes. ToolNest provides clear guides for Telenor, Jazz, Zong, and Ufone telecom balances, packages, and codes.' }
+          { question: 'Are the tools on ToolNest free?', answer: 'Yes. ToolNest offers 100% free online tools without subscription fees.' },
+          { question: 'Does ToolNest require an account or registration?', answer: 'No. Every tool is available immediately without signing in.' },
         ]
-
-    const itemList = tools.slice(0, 10).map((t, index) => ({
-      '@type': 'ListItem',
-      position: index + 1,
-      item: {
-        '@type': 'WebApplication',
-        name: t.name,
-        applicationCategory: t.category,
-        url: `${SITE_URL}/tools/${t.slug}`
-      }
-    }))
-
-    const breadcrumbLabels = route === '/'
-      ? []
-      : route.startsWith('/tools/')
-        ? ['Home', current?.name || 'Tool']
-        : route.startsWith('/category/')
-          ? ['Home', category?.name || 'Category']
-          : route.startsWith('/pakistan')
-            ? ['Home', 'Pakistan utilities']
-            : ['Home', title]
-
-    const breadcrumbList = breadcrumbLabels.length > 0 ? {
-      '@type': 'BreadcrumbList',
-      itemListElement: breadcrumbLabels.map((label, index) => ({
-        '@type': 'ListItem',
-        position: index + 1,
-        name: label,
-        item: `${SITE_URL}${index === 0 ? '/' : route}`
-      }))
-    } : null
 
     const schema = {
       '@context': 'https://schema.org',
       '@graph': [
-        { '@type': 'WebSite', name: 'ToolNest', url: `${SITE_URL}/` },
-        ...(breadcrumbList ? [breadcrumbList] : []),
-        ...(isPdfToPpt ? [{
-          '@type': 'HowTo',
-          name: 'How to Convert PDF to PPT Online for Free',
-          description: 'Learn how to convert PDF documents into editable Microsoft PowerPoint presentations in 3 simple steps.',
-          step: [
-            {
-              '@type': 'HowToStep',
-              name: 'Upload your PDF document',
-              text: 'Drag and drop your PDF file or click to select from your device.',
-              position: 1
-            },
-            {
-              '@type': 'HowToStep',
-              name: 'Configure Presentation Theme and Layout',
-              text: 'Select your presentation aspect ratio (16:9 widescreen or 4:3 standard) and review the slide deck.',
-              position: 2
-            },
-            {
-              '@type': 'HowToStep',
-              name: 'Download Editable PowerPoint (.pptx)',
-              text: 'Click Download PowerPoint to generate and save your editable presentation file.',
-              position: 3
-            }
-          ]
-        }] : []),
-        ...(isTelenorQuiz ? [{
-          '@type': 'Article',
-          headline: title,
-          description,
-          datePublished: '2026-09-24',
-          dateModified: '2026-09-24',
-          author: { '@type': 'Organization', name: 'ToolNest' },
-          publisher: { '@type': 'Organization', name: 'ToolNest' },
-          mainEntityOfPage: `${SITE_URL}${route}`
-        }] : []),
         {
-          '@type': current ? 'WebPage' : 'CollectionPage',
+          '@type': 'WebSite',
+          name: 'ToolNest',
+          url: `${SITE_URL}/`,
+          potentialAction: {
+            '@type': 'SearchAction',
+            target: `${SITE_URL}/?q={search_term_string}`,
+            'query-input': 'required name=search_term_string'
+          }
+        },
+        {
+          '@type': currentTool ? 'WebApplication' : 'WebPage',
           name: title,
-          url: `${SITE_URL}${route || '/'}`,
+          url: `${SITE_URL}${route}`,
           description: description,
           isPartOf: { '@type': 'WebSite', name: 'ToolNest', url: `${SITE_URL}/` },
-          ...(current ? {
-            mainEntity: {
-              '@type': 'WebApplication',
-              name: current.name,
-              description: current.seoDescription,
-              applicationCategory: isPdfToPpt ? 'BusinessApplication' : current.category,
-              operatingSystem: 'All',
-              offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-              ...(isPdfToPpt ? {
-                aggregateRating: {
-                  '@type': 'AggregateRating',
-                  ratingValue: '4.9',
-                  ratingCount: '1840'
-                }
-              } : {}),
-              url: `${SITE_URL}/tools/${current.slug}`
-            }
-          } : {}),
-          ...(current ? {} : { hasPart: itemList })
+          ...(currentTool ? {
+            applicationCategory: isPdfToPpt ? 'BusinessApplication' : currentTool.category,
+            operatingSystem: 'All',
+            offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+          } : {})
         },
         {
           '@type': 'FAQPage',
@@ -219,15 +191,42 @@ function App() {
       document.head.appendChild(script)
     }
     script.textContent = JSON.stringify(schema)
-  }, [route])
+  }, [route, searchQueryParam])
 
+  // Page Routing Logic
   let page = <Home />
-  if (route.startsWith('/tools/')) page = <ToolPage slug={route.split('/')[2]} />
-  else if (route === '/popular') page = <PopularPage />
-  else if (route.startsWith('/category/')) page = <CategoryPage slug={route.split('/')[2]} />
-  else if (route === '/pakistan/telenor/quiz-today') page = <TelenorQuizPage />
-  else if (route.startsWith('/pakistan')) page = <PakistanPage path={route} />
-  else if (['/about', '/contact', '/privacy', '/terms', '/disclaimer', '/sitemap'].includes(route)) page = <InfoPage path={route} />
+
+  const pathParts = route.split('/').filter(Boolean)
+
+  if (route === '/search' || searchQueryParam) {
+    page = <SearchPage initialQuery={searchQueryParam} />
+  } else if (pathParts[0] === 'tools' && pathParts[1]) {
+    page = <ToolPage slug={pathParts[1]} />
+  } else if (route === '/popular') {
+    page = <PopularPage />
+  } else if (pathParts[0] === 'category' && pathParts[1]) {
+    page = <CategoryPage slug={pathParts[1]} />
+  } else if (route === '/pakistan/telenor/quiz-today') {
+    page = <TelenorQuizPage />
+  } else if (pathParts[0] === 'pakistan') {
+    if (pathParts.length === 3) {
+      page = <PakistanGuidePage providerSlug={pathParts[1]} guideSlug={pathParts[2]} />
+    } else {
+      page = <PakistanPage path={route} />
+    }
+  } else if (route === '/about') {
+    page = <AboutPage />
+  } else if (route === '/contact') {
+    page = <ContactPage />
+  } else if (route === '/privacy') {
+    page = <PrivacyPolicyPage />
+  } else if (route === '/terms') {
+    page = <TermsPage />
+  } else if (route === '/disclaimer') {
+    page = <DisclaimerPage />
+  } else if (route === '/sitemap') {
+    page = <SitemapPage />
+  }
 
   return (
     <ToastProvider>
@@ -277,10 +276,155 @@ function App() {
   )
 }
 
+function SearchPage({ initialQuery }: { initialQuery: string }) {
+  const [query, setQuery] = useState(initialQuery)
+  const [selectedCategory, setSelectedCategory] = useState<string>('all')
+  const navigate = useNavigate()
+
+  const matchedTools = useMemo(() => {
+    if (!query.trim()) return tools
+    const q = query.toLowerCase()
+    return tools.filter(
+      (t) =>
+        t.name.toLowerCase().includes(q) ||
+        t.category.toLowerCase().includes(q) ||
+        t.description.toLowerCase().includes(q)
+    )
+  }, [query])
+
+  const filteredTools = useMemo(() => {
+    if (selectedCategory === 'all') return matchedTools
+    return matchedTools.filter((t) => slugify(t.category) === selectedCategory)
+  }, [matchedTools, selectedCategory])
+
+  const matchedGuides = useMemo(() => {
+    if (!query.trim()) return []
+    const q = query.toLowerCase()
+    return PROVIDERS.flatMap((p) =>
+      GUIDE_TYPES.map((g) => ({
+        provider: p.name,
+        providerSlug: p.slug,
+        guideName: g.name,
+        guideSlug: g.slug,
+        title: `${p.name} ${g.name}`,
+        color: p.color,
+      }))
+    ).filter(
+      (g) =>
+        g.title.toLowerCase().includes(q) ||
+        g.provider.toLowerCase().includes(q) ||
+        g.guideName.toLowerCase().includes(q)
+    )
+  }, [query])
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (query.trim()) {
+      navigate(`/?q=${encodeURIComponent(query.trim())}`)
+    }
+  }
+
+  return (
+    <div className="search-page-wrap">
+      <nav className="breadcrumbs" aria-label="Breadcrumb">
+        <Link to="/">Home</Link>
+        <span>/ Search</span>
+      </nav>
+
+      <div className="page-intro">
+        <div className="eyebrow">SEARCH TOOLNEST</div>
+        <h1>Search Results {query ? `for "${query}"` : ''}</h1>
+        <p>Explore tools, file converters, financial calculators, and Pakistan utility guides.</p>
+      </div>
+
+      <form onSubmit={handleSearchSubmit} className="hero-search-wrap" style={{ margin: '0 0 24px', maxWidth: '100%' }}>
+        <Search size={22} />
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search for PDF to PPT, Image Compressor, Loan Calculator, Jazz Balance..."
+          aria-label="Search inputs"
+        />
+        {query && (
+          <button type="button" onClick={() => setQuery('')} aria-label="Clear search">
+            <X size={18} />
+          </button>
+        )}
+        <button type="submit" className="button button-primary btn-sm">Search</button>
+      </form>
+
+      {/* Category Filter Chips */}
+      <div className="search-filters-row">
+        <button
+          type="button"
+          className={`filter-chip ${selectedCategory === 'all' ? 'active' : ''}`}
+          onClick={() => setSelectedCategory('all')}
+        >
+          All ({matchedTools.length + (selectedCategory === 'all' ? matchedGuides.length : 0)})
+        </button>
+        {categories.map((c) => (
+          <button
+            key={c.slug}
+            type="button"
+            className={`filter-chip ${selectedCategory === c.slug ? 'active' : ''}`}
+            onClick={() => setSelectedCategory(c.slug)}
+          >
+            {c.name}
+          </button>
+        ))}
+      </div>
+
+      {/* Pakistan Guide Results if matched */}
+      {matchedGuides.length > 0 && (selectedCategory === 'all' || selectedCategory === 'pakistan') && (
+        <section style={{ marginBottom: '36px' }}>
+          <h2 style={{ fontSize: '20px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Smartphone size={20} className="text-emerald" /> Pakistan Utility Guides ({matchedGuides.length})
+          </h2>
+          <div className="guide-links-grid">
+            {matchedGuides.map((g) => (
+              <Link
+                to={`/pakistan/${g.providerSlug}/${g.guideSlug}`}
+                key={`${g.providerSlug}-${g.guideSlug}`}
+                className="guide-link-card"
+              >
+                <span>{g.title}</span>
+                <ArrowRight size={14} />
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Tools Grid */}
+      <section>
+        <h2 style={{ fontSize: '20px', marginBottom: '16px' }}>
+          Tools & Utilities ({filteredTools.length})
+        </h2>
+        {filteredTools.length > 0 ? (
+          <div className="tool-grid">
+            {filteredTools.map((tool) => (
+              <ToolCard key={tool.slug} tool={tool} />
+            ))}
+          </div>
+        ) : (
+          <div className="empty-state" style={{ textAlign: 'center', padding: '40px 0' }}>
+            <FileSearch size={40} style={{ color: 'var(--muted)', margin: 'auto' }} />
+            <h3>No tools found</h3>
+            <p style={{ color: 'var(--muted)' }}>Try searching with a different keyword like &quot;PDF&quot;, &quot;Compress&quot;, or &quot;Calculate&quot;.</p>
+          </div>
+        )}
+      </section>
+    </div>
+  )
+}
+
 function PopularPage() {
   return (
     <div className="page-wrap">
-      <Breadcrumbs items={['Popular tools']} />
+      <nav className="breadcrumbs" aria-label="Breadcrumb">
+        <Link to="/">Home</Link>
+        <span>/ Popular</span>
+      </nav>
       <div className="page-intro">
         <div className="eyebrow">POPULAR TOOLS</div>
         <h1>Start with the essentials</h1>
@@ -297,10 +441,19 @@ function PopularPage() {
 
 function Home() {
   const [query, setQuery] = useState('')
+  const navigate = useNavigate()
+
   const results = useMemo(() => {
     if (!query) return []
     return tools.filter((tool) => `${tool.name} ${tool.category}`.toLowerCase().includes(query.toLowerCase())).slice(0, 6)
   }, [query])
+
+  const handleHeroSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (query.trim()) {
+      navigate(`/?q=${encodeURIComponent(query.trim())}`)
+    }
+  }
 
   return (
     <>
@@ -311,19 +464,19 @@ function Home() {
         </div>
         <h1>Free Online Tools for PDF to PPT, Images, Code & Calculations</h1>
         <p className="hero-copy">
-          Convert PDF to PPT online for free with editable slides, compress images, count words, format JSON, and run financial calculators in seconds. Everything runs privately in your browser with zero data storage.
+          Convert PDF to PPT online for free with editable slides, compress images, count words, format JSON, and run financial calculators in seconds. Everything runs privately in your browser.
         </p>
 
-        <div className="hero-search-wrap">
+        <form onSubmit={handleHeroSearch} className="hero-search-wrap">
           <Search size={22} />
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search tools (e.g. PDF to PPT, Image Compressor, JSON Formatter)..."
+            placeholder="Search 30+ tools (e.g. PDF to PPT, Image Compressor, JSON, Jazz Balance)..."
             aria-label="Search for a tool"
           />
           {query && (
-            <button onClick={() => setQuery('')} aria-label="Clear search">
+            <button type="button" onClick={() => setQuery('')} aria-label="Clear search">
               <X size={18} />
             </button>
           )}
@@ -343,7 +496,7 @@ function Home() {
               ))}
             </div>
           )}
-        </div>
+        </form>
 
         <div className="hero-trust">
           <span><Check size={16} /> 100% Free & Unlimited</span>
@@ -351,6 +504,11 @@ function Home() {
           <span><Check size={16} /> Client-Side Privacy</span>
         </div>
       </section>
+
+      {/* Responsive AdSlot */}
+      <div className="section" style={{ padding: '24px 28px 0' }}>
+        <AdSlot label="Advertisement" />
+      </div>
 
       <section className="section">
         <SectionHeading eyebrow="FEATURED TOOL" title="Convert PDF to PowerPoint Presentation Online" />
@@ -388,7 +546,7 @@ function Home() {
       <section className="section utility-band">
         <div>
           <div className="eyebrow">MADE FOR PAKISTAN</div>
-          <h2>Everyday answers,<br /><em>without the guesswork.</em></h2>
+          <h2>Everyday telecom answers,<br /><em>without the guesswork.</em></h2>
           <p>
             Quick, reliable guides for checking telecom balances, active internet MBs, SIM ownership, and packages across Pakistan&apos;s leading networks.
           </p>
@@ -401,7 +559,7 @@ function Home() {
             <Link to={`/pakistan/${provider.toLowerCase()}`} className="provider-row" key={provider}>
               <span className={`provider-logo p-${index}`}>{provider[0]}</span>
               <span>
-                <strong>{provider}</strong>
+                <strong>{provider} Telecom Guides</strong>
                 <small>8 quick utility guides</small>
               </span>
               <ArrowRight size={18} />
@@ -490,12 +648,17 @@ function CategoryPage({ slug }: { slug: string }) {
 
   return (
     <div className="page-wrap">
-      <Breadcrumbs items={['Categories', category?.name || 'Tools']} />
+      <nav className="breadcrumbs" aria-label="Breadcrumb">
+        <Link to="/">Home</Link>
+        <span>/ {category?.name || 'Category'}</span>
+      </nav>
+
       <div className="page-intro">
         <div className="eyebrow">TOOL COLLECTION</div>
         <h1>{category?.name || 'Online Tools'}</h1>
         <p>Simple, powerful, and private tools designed to get real work done in your browser.</p>
       </div>
+
       <div className="tool-grid">
         {list.map((tool) => (
           <ToolCard key={tool.slug} tool={tool} />
@@ -517,7 +680,13 @@ function ToolContent({ tool }: { tool: Tool }) {
 
   return (
     <div className="page-wrap tool-page">
-      <Breadcrumbs items={[tool.category, tool.name]} />
+      <nav className="breadcrumbs" aria-label="Breadcrumb">
+        <Link to="/">Home</Link>
+        <span>/</span>
+        <Link to={`/category/${slugify(tool.category)}`}>{tool.category}</Link>
+        <span>/ {tool.name}</span>
+      </nav>
+
       <div className="tool-layout">
         <article>
           <div className="tool-title">
@@ -531,14 +700,14 @@ function ToolContent({ tool }: { tool: Tool }) {
             </div>
           </div>
 
-          {/* Interactive functional component */}
+          {/* Interactive functional tool workspace */}
           <ToolDispatcher tool={tool} />
 
           {/* Tool Feedback & Bookmark bar */}
           <ToolFeedback toolSlug={tool.slug} toolName={tool.name} />
 
-          {/* SEO Rich content */}
-          {isPdfToPpt ? <PdfToPptArticle /> : <ArticleContent tool={tool} />}
+          {/* SEO Rich article content */}
+          {isPdfToPpt ? <PdfToPptArticle /> : <ToolArticle tool={tool} />}
         </article>
 
         <aside>
@@ -554,77 +723,75 @@ function ToolContent({ tool }: { tool: Tool }) {
   )
 }
 
-function ArticleContent({ tool }: { tool: Tool }) {
-  const faqs = getToolFaqs(tool)
-
-  return (
-    <div className="article-content">
-      <h2>How to use {tool.name.toLowerCase()}</h2>
-      <p>
-        Use this free online tool in a few simple steps. Add your input above, configure your desired options, then copy or download the result instantly. ToolNest keeps the experience focused and lightweight so you can finish the task with zero friction.
-      </p>
-
-      <h2>Frequently asked questions</h2>
-      <FAQ
-        items={faqs.map((f) => [f.question, f.answer])}
-      />
-
-      <h2>Related tools in {tool.category}</h2>
-      <div className="related-tools">
-        {tools
-          .filter((item) => item.category === tool.category && item.slug !== tool.slug)
-          .slice(0, 4)
-          .map((item) => (
-            <Link to={`/tools/${item.slug}`} key={item.slug}>
-              <span>{item.name}</span>
-              <ArrowRight size={15} />
-            </Link>
-          ))}
-      </div>
-    </div>
-  )
-}
-
 function PakistanPage({ path }: { path: string }) {
-  const provider = path.split('/')[2]
-  const name = provider ? provider[0].toUpperCase() + provider.slice(1) : ''
+  const providerSlug = path.split('/')[2] || ''
+  const providerObj = PROVIDERS.find((p) => p.slug === providerSlug)
+  const name = providerObj ? providerObj.name : ''
+
   return (
     <div className="page-wrap">
-      <Breadcrumbs items={name ? ['Pakistan', name] : ['Pakistan utilities']} />
+      <nav className="breadcrumbs" aria-label="Breadcrumb">
+        <Link to="/">Home</Link>
+        <span>/ Pakistan Utilities</span>
+        {name && <span>/ {name}</span>}
+      </nav>
+
       <div className="page-intro">
-        <div className="eyebrow">PAKISTAN UTILITY GUIDES</div>
+        <div className="eyebrow">PAKISTAN TELECOM GUIDES</div>
         <h1>{name ? `${name} Telecom Guides` : 'Useful Telecom Guides for Pakistan'}</h1>
         <p>
-          Practical, easy-to-read guides for checking telecom services, checking account balances, and internet packages.
+          Practical, easy-to-read guides for checking telecom services, checking account balances, USSD codes, and internet packages.
         </p>
       </div>
-      {provider === 'telenor' && (
+
+      {(providerSlug === 'telenor' || !providerSlug) && (
         <Link to="/pakistan/telenor/quiz-today" className="featured-guide">
           <div>
             <strong>My Telenor Quiz Today</strong>
             <p style={{ margin: '4px 0 0', color: 'var(--muted)', fontSize: '14px' }}>
-              Reported answers, access steps, and reward guidance for 24 September 2026
+              Reported answers, access steps, and reward guidance
             </p>
           </div>
           <ArrowRight size={18} />
         </Link>
       )}
-      <div className="provider-grid">
-        {(name ? pakistanGuides : providers).map((item) => (
-          <Link
-            to={name ? `/pakistan/${provider}/${slugify(item)}` : `/pakistan/${item.toLowerCase()}`}
-            className="guide-card"
-            key={item}
-          >
-            <span className="guide-number">{name ? 'Q' : item[0]}</span>
-            <span>
-              <strong>{name ? `${name} ${item}` : `${item} guides`}</strong>
-              <small>{name ? 'Answer, context, and instructions' : 'View utility guides'}</small>
-            </span>
-            <ArrowRight size={18} />
-          </Link>
-        ))}
-      </div>
+
+      {providerSlug ? (
+        <div className="provider-grid">
+          {GUIDE_TYPES.map((g) => (
+            <Link
+              to={`/pakistan/${providerSlug}/${g.slug}`}
+              className="guide-card"
+              key={g.slug}
+            >
+              <span className="guide-number" style={{ background: `${providerObj?.color}20`, color: providerObj?.color }}>
+                {g.name[0]}
+              </span>
+              <span>
+                <strong>{name} {g.name}</strong>
+                <small>USSD code, SMS & app steps</small>
+              </span>
+              <ArrowRight size={18} />
+            </Link>
+          ))}
+        </div>
+      ) : (
+        <div className="provider-grid">
+          {PROVIDERS.map((p) => (
+            <Link to={`/pakistan/${p.slug}`} className="guide-card" key={p.slug}>
+              <span className="guide-number" style={{ background: `${p.color}20`, color: p.color }}>
+                {p.name[0]}
+              </span>
+              <span>
+                <strong>{p.name} Telecom Guides</strong>
+                <small>8 utility guides & USSD codes</small>
+              </span>
+              <ArrowRight size={18} />
+            </Link>
+          ))}
+        </div>
+      )}
+
       <div className="update-note">
         <ShieldCheck size={22} />
         <div>
@@ -649,14 +816,23 @@ function TelenorQuizPage() {
 
   return (
     <div className="page-wrap article-page">
-      <Breadcrumbs items={['Pakistan', 'Telenor', 'Quiz today']} />
+      <nav className="breadcrumbs" aria-label="Breadcrumb">
+        <Link to="/">Home</Link>
+        <span>/</span>
+        <Link to="/pakistan">Pakistan</Link>
+        <span>/</span>
+        <Link to="/pakistan/telenor">Telenor</Link>
+        <span>/ Quiz today</span>
+      </nav>
+
       <div className="page-intro">
-        <div className="eyebrow">UPDATED 24 SEPTEMBER 2026</div>
+        <div className="eyebrow">UPDATED DAILY</div>
         <h1>My Telenor Quiz Today: Answers</h1>
         <p>
           Reported answers for the daily My Telenor quiz, plus clear steps for finding the quiz and checking rewards in the official app.
         </p>
       </div>
+
       <div className="article-content">
         <div className="update-note">
           <ShieldCheck size={22} />
@@ -685,7 +861,7 @@ function TelenorQuizPage() {
 
         <h2>What is the Telenor daily quiz?</h2>
         <p>
-          The My Telenor quiz is a short question-and-answer feature in the app, often shown under Play and Win or Test Your Skills. It may cover general knowledge, Pakistan studies, science, geography, Islamiyat, technology, and current topics.
+          The My Telenor quiz is a short question-and-answer feature in the app, often shown under Play and Win or Test Your Skills. It covers general knowledge, science, history, and technology.
         </p>
 
         <h2>How to play the quiz</h2>
@@ -694,15 +870,15 @@ function TelenorQuizPage() {
           <li>Sign in with your Telenor number and complete verification.</li>
           <li>Open Play and Win or Test Your Skills from the home screen.</li>
           <li>Answer all five multiple-choice questions carefully.</li>
-          <li>Check the reward screen after submitting. The reward and eligibility may vary by offer.</li>
+          <li>Check the reward screen after submitting.</li>
         </ol>
 
         <h2>Frequently asked questions</h2>
         <FAQ
           items={[
             ['How do I participate in My Telenor Quiz Today?', 'Open the official My Telenor app, sign in, and look for Play and Win or Test Your Skills.'],
-            ['Can non-Telenor users take part?', 'Eligibility is controlled by Telenor and may vary. Check the official app for the account currently signed in.'],
-            ['How many times can I play per day?', 'The quiz is commonly available once per day, but the app rules and reward window can change.'],
+            ['Can non-Telenor users take part?', 'Eligibility is controlled by Telenor and may vary.'],
+            ['How many times can I play per day?', 'The quiz is commonly available once per day.'],
             ['Is ToolNest affiliated with Telenor?', 'No. ToolNest is an independent informational website and is not endorsed or sponsored by Telenor Pakistan.']
           ]}
         />
@@ -711,70 +887,34 @@ function TelenorQuizPage() {
   )
 }
 
-function InfoPage({ path }: { path: string }) {
-  const pages: Record<string, [string, string]> = {
-    '/about': ['About ToolNest', 'ToolNest is an independent suite of fast, browser-based tools and verified utility guides built with privacy in mind.'],
-    '/contact': ['Contact us', 'Have a correction, feature suggestion, or feedback? Email hello@onlinetoolnest.tech.'],
-    '/privacy': ['Privacy policy', 'ToolNest processes user data and files locally in the browser. We do not store, log, or track your documents.'],
-    '/terms': ['Terms of service', 'ToolNest tools are provided free of charge for productivity and personal convenience.'],
-    '/disclaimer': ['Disclaimer', 'Telecom guides and tools are educational and provided as-is. Check with official providers for account-specific inquiries.'],
-    '/sitemap': ['Sitemap', 'Browse all ToolNest tools, converters, categories, and utility guides.']
-  }
-  const [title, copy] = pages[path] || pages['/about']
-
-  return (
-    <div className="page-wrap legal-page">
-      <Breadcrumbs items={[title]} />
-      <div className="page-intro">
-        <div className="eyebrow">TOOLNEST</div>
-        <h1>{title}</h1>
-        <p>{copy}</p>
-      </div>
-      {path === '/sitemap' ? (
-        <div className="sitemap-grid">
-          <Link to="/">Home</Link>
-          <Link to="/tools/pdf-to-ppt">PDF to PPT Converter</Link>
-          <Link to="/pakistan">Pakistan guides</Link>
-          {categories.map((category) => (
-            <Link to={`/category/${category.slug}`} key={category.slug}>
-              {category.name}
-            </Link>
-          ))}
-          {tools.map((tool) => (
-            <Link to={`/tools/${tool.slug}`} key={tool.slug}>
-              {tool.name}
-            </Link>
-          ))}
-        </div>
-      ) : (
-        <ArticleContent tool={tools[0]} />
-      )}
-    </div>
-  )
-}
-
-function Breadcrumbs({ items }: { items: string[] }) {
-  return (
-    <nav className="breadcrumbs" aria-label="Breadcrumb">
-      <Link to="/">Home</Link>
-      {items.map((item) => (
-        <span key={item}>/ {item}</span>
-      ))}
-    </nav>
-  )
-}
-
 function AdSlot({ label }: { label: string }) {
+  useEffect(() => {
+    try {
+      // @ts-expect-error Google AdSense push
+      (window.adsbygoogle = window.adsbygoogle || []).push({})
+    } catch {
+      // ignore if adblocker or local dev
+    }
+  }, [])
+
   return (
     <div className="ad-slot">
-      <span>{label}</span>
+      <ins
+        className="adsbygoogle"
+        style={{ display: 'block', width: '100%', height: '100%' }}
+        data-ad-client="ca-pub-2607800826981704"
+        data-ad-slot="auto"
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      />
+      <span style={{ position: 'absolute', opacity: 0.5 }}>{label}</span>
     </div>
   )
 }
 
 function NotFound() {
   return (
-    <div className="page-wrap empty-state" style={{ textAlign: 'center', paddingTop: '100px' }}>
+    <div className="page-wrap empty-state" style={{ textAlign: 'center', paddingTop: '80px' }}>
       <FileSearch size={48} style={{ color: 'var(--green)', margin: 'auto' }} />
       <h1 style={{ fontSize: '38px', margin: '20px 0 10px' }}>Page Not Found</h1>
       <p style={{ color: 'var(--muted)', marginBottom: '24px' }}>
@@ -818,6 +958,7 @@ function Footer() {
           <div>
             <strong>Company</strong>
             <Link to="/about">About Us</Link>
+            <Link to="/contact">Contact Us</Link>
             <Link to="/privacy">Privacy Policy</Link>
             <Link to="/terms">Terms of Service</Link>
             <Link to="/sitemap">Sitemap</Link>

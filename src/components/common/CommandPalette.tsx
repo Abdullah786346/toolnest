@@ -1,7 +1,8 @@
 import { useEffect, useState, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Search, CornerDownLeft, Sparkles, X } from 'lucide-react'
+import { Search, CornerDownLeft, Sparkles, X, Smartphone } from 'lucide-react'
 import { tools, categories } from '../../data'
+import { PROVIDERS, GUIDE_TYPES } from '../../data/pakistanGuidesData'
 
 export function CommandPalette({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [query, setQuery] = useState('')
@@ -24,13 +25,31 @@ export function CommandPalette({ isOpen, onClose }: { isOpen: boolean; onClose: 
           t.category.toLowerCase().includes(query.toLowerCase()) ||
           t.description.toLowerCase().includes(query.toLowerCase())
       )
-    : tools.filter((t) => t.popular).slice(0, 6)
+    : tools.filter((t) => t.popular).slice(0, 5)
 
   const filteredCategories = query.trim()
     ? categories.filter((c) => c.name.toLowerCase().includes(query.toLowerCase()))
     : []
 
-  const totalResults = filteredTools.length + filteredCategories.length
+  const filteredGuides = query.trim()
+    ? PROVIDERS.flatMap((p) =>
+        GUIDE_TYPES.map((g) => ({
+          provider: p.name,
+          providerSlug: p.slug,
+          guideName: g.name,
+          guideSlug: g.slug,
+          title: `${p.name} ${g.name}`,
+          color: p.color,
+        }))
+      ).filter(
+        (g) =>
+          g.title.toLowerCase().includes(query.toLowerCase()) ||
+          g.provider.toLowerCase().includes(query.toLowerCase()) ||
+          g.guideName.toLowerCase().includes(query.toLowerCase())
+      ).slice(0, 4)
+    : []
+
+  const totalResults = filteredTools.length + filteredCategories.length + filteredGuides.length
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -50,9 +69,12 @@ export function CommandPalette({ isOpen, onClose }: { isOpen: boolean; onClose: 
           if (selectedIndex < filteredTools.length) {
             const selected = filteredTools[selectedIndex]
             navigate(`/tools/${selected.slug}`)
-          } else {
+          } else if (selectedIndex < filteredTools.length + filteredCategories.length) {
             const cat = filteredCategories[selectedIndex - filteredTools.length]
             navigate(cat.slug === 'pakistan' ? '/pakistan' : `/category/${cat.slug}`)
+          } else {
+            const guide = filteredGuides[selectedIndex - filteredTools.length - filteredCategories.length]
+            navigate(`/pakistan/${guide.providerSlug}/${guide.guideSlug}`)
           }
           onClose()
         }
@@ -61,7 +83,7 @@ export function CommandPalette({ isOpen, onClose }: { isOpen: boolean; onClose: 
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isOpen, selectedIndex, totalResults, filteredTools, filteredCategories, navigate, onClose])
+  }, [isOpen, selectedIndex, totalResults, filteredTools, filteredCategories, filteredGuides, navigate, onClose])
 
   if (!isOpen) return null
 
@@ -78,7 +100,7 @@ export function CommandPalette({ isOpen, onClose }: { isOpen: boolean; onClose: 
               setQuery(e.target.value)
               setSelectedIndex(0)
             }}
-            placeholder="Search tools, converters, calculators, guides..."
+            placeholder="Search 30+ tools, converters, calculators, Pakistan guides..."
             aria-label="Search command palette"
           />
           {query && (
@@ -122,6 +144,38 @@ export function CommandPalette({ isOpen, onClose }: { isOpen: boolean; onClose: 
             </div>
           )}
 
+          {filteredGuides.length > 0 && (
+            <div className="command-section">
+              <div className="section-label">Pakistan Telecom Guides</div>
+              {filteredGuides.map((guide, idx) => {
+                const itemIndex = filteredTools.length + filteredCategories.length + idx
+                return (
+                  <Link
+                    key={`${guide.providerSlug}-${guide.guideSlug}`}
+                    to={`/pakistan/${guide.providerSlug}/${guide.guideSlug}`}
+                    onClick={onClose}
+                    className={`command-item ${itemIndex === selectedIndex ? 'selected' : ''}`}
+                    onMouseEnter={() => setSelectedIndex(itemIndex)}
+                  >
+                    <div className="command-icon" style={{ background: `${guide.color}15`, color: guide.color }}>
+                      <Smartphone size={16} />
+                    </div>
+                    <div className="command-text">
+                      <strong>{guide.title}</strong>
+                      <small>Official USSD code & instructions</small>
+                    </div>
+                    <span className="cat-pill">Pakistan</span>
+                    {itemIndex === selectedIndex && (
+                      <span className="enter-badge">
+                        Open <CornerDownLeft size={12} />
+                      </span>
+                    )}
+                  </Link>
+                )
+              })}
+            </div>
+          )}
+
           <div className="command-section">
             <div className="section-label">
               {query.trim() ? 'Tools & Utilities' : 'Popular Tools'}
@@ -154,12 +208,12 @@ export function CommandPalette({ isOpen, onClose }: { isOpen: boolean; onClose: 
                   </Link>
                 )
               })
-            ) : (
+            ) : totalResults === 0 ? (
               <div className="no-results">
                 <Sparkles size={24} />
                 <p>No tools found matching &quot;{query}&quot;</p>
               </div>
-            )}
+            ) : null}
           </div>
         </div>
 
