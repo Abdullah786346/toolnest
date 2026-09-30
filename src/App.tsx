@@ -58,11 +58,12 @@ function App() {
     const isPakistanSpecificGuide = parts[0] === 'pakistan' && parts[1] && parts[1] !== 'telenor' || (parts[1] === 'telenor' && parts[2] !== 'quiz-today' && parts.length === 3)
     const isTelenorQuiz = route === '/pakistan/telenor/quiz-today'
     const isPdfToPpt = currentTool?.slug === 'pdf-to-ppt'
+    const isImageToText = currentTool?.slug === 'image-to-text'
     const isSearchRoute = route === '/search' || Boolean(searchQueryParam)
 
     let title = 'ToolNest | Free Online Tools, PDF to PPT & Utility Guides'
-    let description = 'Free online tools for PDF to PPT converter, image compressor, word counter, percentage calculator, and developer tasks, plus Pakistan utility guides.'
-    let keywords = 'pdf to ppt, free online tools, pdf tools, image compressor, word counter, json formatter, percentage calculator'
+    let description = 'Free online tools for PDF to PPT converter, image to text converter, image compressor, word counter, percentage calculator, and developer tasks, plus Pakistan utility guides.'
+    let keywords = 'image to text, image to text converter, pdf to ppt, free online tools, pdf tools, image compressor, word counter, json formatter, percentage calculator'
 
     if (isSearchRoute) {
       title = `Search Results for "${searchQueryParam}" | ToolNest`
@@ -71,6 +72,10 @@ function App() {
       title = 'PDF to PPT Converter - Free Online PDF to PowerPoint | ToolNest'
       description = 'Convert PDF to PPT online for free with ToolNest. Turn PDF documents into editable Microsoft PowerPoint (PPT/PPTX) presentations instantly in your browser.'
       keywords = 'pdf to ppt, pdf to ppt converter, convert pdf to ppt, pdf to powerpoint, pdf to pptx, free pdf to ppt converter'
+    } else if (isImageToText) {
+      title = 'Image to Text Converter Online Free - Extract Text from Image | ToolNest'
+      description = 'Convert image to text online for free with ToolNest. Extract text from JPG, PNG, WebP, and photos instantly in your browser. 100% free OCR tool with no signup required.'
+      keywords = 'image to text, image to text converter, image to text converter online free, extract text from image, ocr online, picture to text, photo to text'
     } else if (currentTool) {
       title = currentTool.seoTitle
       description = currentTool.seoDescription

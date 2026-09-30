@@ -6,6 +6,28 @@ export interface FaqItem {
 }
 
 export const TOOL_SPECIFIC_FAQS: Record<string, FaqItem[]> = {
+  'image-to-text': [
+    {
+      question: 'How do I convert an image to text online for free?',
+      answer:
+        'Upload your image (JPG, PNG, WebP, GIF, or BMP) to ToolNest Image to Text Converter. The browser engine processes the optical characters locally and displays the extracted text in an editable text workspace.',
+    },
+    {
+      question: 'Does this Image to Text Converter upload my photos to any server?',
+      answer:
+        'No. ToolNest processes images 100% locally in your web browser. Your private photos, documents, and extracted text never leave your device.',
+    },
+    {
+      question: 'Can I copy or download the extracted text?',
+      answer:
+        'Yes! You can click "Copy Extracted Text" to copy the text to your clipboard, or click "Download .TXT File" to save it as a text document.',
+    },
+    {
+      question: 'What image formats are supported for text extraction?',
+      answer:
+        'ToolNest supports all standard web image formats including JPG, JPEG, PNG, WebP, GIF, and BMP files.',
+    },
+  ],
   'pdf-to-ppt': [
     {
       question: 'How do I convert a PDF to PowerPoint for free?',

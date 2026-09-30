@@ -1,6 +1,6 @@
 import { PdfToPptTool } from './PdfToPptTool'
 import { PdfCompressorTool, PdfMergerTool, PdfSplitterTool, JpgToPdfTool } from './PdfTools'
-import { ImageCompressorTool, ImageResizerTool, FormatConverterTool } from './ImageTools'
+import { ImageCompressorTool, ImageResizerTool, FormatConverterTool, ImageToTextTool } from './ImageTools'
 import { PercentageCalculatorTool, AgeCalculatorTool, BmiCalculatorTool, DiscountCalculatorTool, GstCalculatorTool, LoanCalculatorTool } from './CalculatorTools'
 import { JsonFormatterTool, JsonValidatorTool, PasswordGeneratorTool, UuidGeneratorTool, Base64Tool, UrlEncoderTool } from './DeveloperTools'
 import { WordCounterTool, CaseConverterTool, RemoveDuplicatesTool, TextSorterTool, LoremIpsumTool } from './TextTools'
@@ -22,6 +22,8 @@ export function ToolDispatcher({ tool }: { tool: Tool }) {
       return <JpgToPdfTool />
     case 'pdf-to-jpg':
       return <FormatConverterTool targetFormat="jpg" />
+    case 'image-to-text':
+      return <ImageToTextTool />
     case 'image-compressor':
       return <ImageCompressorTool />
     case 'image-resizer':

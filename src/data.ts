@@ -16,7 +16,7 @@ export type Tool = {
 
 export const categories = [
   { name: 'PDF Tools', slug: 'pdf-tools', icon: FileText, count: 6, tone: 'coral' },
-  { name: 'Image Tools', slug: 'image-tools', icon: Image, count: 6, tone: 'cyan' },
+  { name: 'Image Tools', slug: 'image-tools', icon: Image, count: 7, tone: 'cyan' },
   { name: 'Text Tools', slug: 'text-tools', icon: Type, count: 7, tone: 'violet' },
   { name: 'Calculator Tools', slug: 'calculator-tools', icon: Calculator, count: 6, tone: 'lime' },
   { name: 'Developer Tools', slug: 'developer-tools', icon: Code2, count: 7, tone: 'blue' },
@@ -31,6 +31,7 @@ const tool = (name: string, slug: string, category: string, description: string,
 
 export const tools: Tool[] = [
   tool('PDF to PPT Converter', 'pdf-to-ppt', 'PDF Tools', 'Convert PDF to PPT online for free. Transform PDF documents into editable Microsoft PowerPoint presentations (.pptx) instantly in your browser.', FileText, true, 'PDF to PPT Converter - Free Online PDF to PowerPoint | ToolNest', 'Convert PDF to PPT online for free with ToolNest. Turn PDF files into editable Microsoft PowerPoint (PPT/PPTX) presentations instantly in your browser. Fast, secure, 100% free.'),
+  tool('Image to Text Converter', 'image-to-text', 'Image Tools', 'Extract text from images online for free. Convert JPG, PNG, and photos into editable text with client-side OCR.', ScanText, true, 'Image to Text Converter Online Free - Extract Text from Image | ToolNest', 'Convert image to text online for free with ToolNest. Extract text from JPG, PNG, and photos instantly in your browser. 100% free OCR tool with no signup required.'),
   tool('PDF Compressor', 'pdf-compressor', 'PDF Tools', 'Reduce PDF file size while keeping documents easy to share.', FileText, true),
   tool('PDF Merger', 'pdf-merger', 'PDF Tools', 'Combine multiple PDF files into one organized document.', FileText),
   tool('PDF Splitter', 'pdf-splitter', 'PDF Tools', 'Extract pages from a PDF with a simple browser workflow.', FileText),
