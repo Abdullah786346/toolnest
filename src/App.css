@@ -721,14 +721,25 @@ em {
 /* Tool Layout */
 .tool-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 280px;
+  grid-template-columns: minmax(0, 920px);
+  justify-content: center;
   gap: 48px;
+}
+
+.tool-layout > article,
+.tool-layout > aside {
+  width: 100%;
+  max-width: 920px;
+  margin-inline: auto;
 }
 
 .tool-title {
   display: flex;
   gap: 18px;
   margin-bottom: 30px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .tool-title h1 {

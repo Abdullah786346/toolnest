@@ -811,12 +811,32 @@ function PakistanPage({ path }: { path: string }) {
 }
 
 function TelenorQuizPage() {
-  const questions: [string, string][] = [
-    ['Which sea creature can release ink when threatened?', 'Squid'],
-    ['Which animal can produce an electric shock?', 'Electric eel'],
-    ['Which animal can climb smooth walls?', 'Gecko'],
-    ['Which animal spins a web to catch its food?', 'Spider'],
-    ['Which insect can carry objects many times its body weight?', 'Ant']
+  const questions = [
+    {
+      question: 'Which is spelled correctly?',
+      options: ['Definately', 'Definitely', 'Definatly', 'Definetely'],
+      answer: 'B) Definitely'
+    },
+    {
+      question: 'Which is spelled correctly?',
+      options: ['Recieve', 'Receive', 'Receeve', 'Receve'],
+      answer: 'B) Receive'
+    },
+    {
+      question: 'Which is spelled correctly?',
+      options: ['Accomodate', 'Acommodate', 'Accommmodate', 'Accomadate'],
+      answer: 'Accommodate'
+    },
+    {
+      question: 'Which is spelled correctly?',
+      options: ['Separate', 'Seperate', 'Sepparate', 'Seperete'],
+      answer: 'A) Separate'
+    },
+    {
+      question: 'Which is spelled correctly?',
+      options: ['Priviledge', 'Privelege', 'Privilege', 'Privillage'],
+      answer: 'C) Privilege'
+    }
   ]
 
   return (
@@ -832,9 +852,9 @@ function TelenorQuizPage() {
 
       <div className="page-intro">
         <div className="eyebrow">UPDATED DAILY</div>
-        <h1>My Telenor Quiz Today: Answers</h1>
+        <h1>My Telenor Quiz Today: Answers for 3 October 2026</h1>
         <p>
-          Reported answers for the daily My Telenor quiz, plus clear steps for finding the quiz and checking rewards in the official app.
+          Find today&apos;s My Telenor quiz answers, learn how to access the daily quiz in the official app, and check the latest reward guidance for Pakistan users.
         </p>
       </div>
 
@@ -851,13 +871,21 @@ function TelenorQuizPage() {
 
         <h2>My Telenor answers today</h2>
         <div className="quiz-answer-list">
-          {questions.map(([question, answer], index) => (
-            <div className="quiz-answer" key={question}>
+          {questions.map(({ question, options, answer }, index) => (
+            <div className="quiz-answer" key={`${question}-${index}`}>
               <span>{String(index + 1).padStart(2, '0')}</span>
               <div>
                 <strong>{question}</strong>
+                <ul style={{ margin: '0.75rem 0 0.5rem 1.2rem', padding: 0 }}>
+                  {options.map((option) => (
+                    <li key={`${question}-${option}`} style={{ marginBottom: '0.25rem' }}>
+                      {option}
+                    </li>
+                  ))}
+                </ul>
                 <p>
                   Correct answer: <b>{answer}</b>
+                  {index === 2 && ' (the exact correct spelling does not appear in the option list in the screenshot)'}
                 </p>
               </div>
             </div>
@@ -866,24 +894,31 @@ function TelenorQuizPage() {
 
         <h2>What is the Telenor daily quiz?</h2>
         <p>
-          The My Telenor quiz is a short question-and-answer feature in the app, often shown under Play and Win or Test Your Skills. It covers general knowledge, science, history, and technology.
+          The My Telenor quiz is a short question-and-answer feature in the app, often shown under Play and Win or Test Your Skills. It covers general knowledge, science, history, technology, and spelling-based questions. Users normally answer five multiple-choice questions and then check whether the reward screen shows the data bundle or other benefits.
         </p>
 
-        <h2>How to play the quiz</h2>
+        <h2>How to play the Telenor quiz today</h2>
         <ol>
           <li>Install or open the official My Telenor app.</li>
-          <li>Sign in with your Telenor number and complete verification.</li>
+          <li>Sign in with your Telenor number and complete the verification step.</li>
           <li>Open Play and Win or Test Your Skills from the home screen.</li>
-          <li>Answer all five multiple-choice questions carefully.</li>
-          <li>Check the reward screen after submitting.</li>
+          <li>Read each question carefully and choose the best answer before submitting.</li>
+          <li>Check the reward screen after submitting to confirm the free data or reward has appeared.</li>
         </ol>
+
+        <h2>Related Pakistan telecom guides</h2>
+        <p>
+          If you are checking other Telenor services, you can also visit the main <Link to="/pakistan/telenor">Telenor guide page</Link> for balance checks, data usage, and package information.
+        </p>
 
         <h2>Frequently asked questions</h2>
         <FAQ
           items={[
             ['How do I participate in My Telenor Quiz Today?', 'Open the official My Telenor app, sign in, and look for Play and Win or Test Your Skills.'],
-            ['Can non-Telenor users take part?', 'Eligibility is controlled by Telenor and may vary.'],
-            ['How many times can I play per day?', 'The quiz is commonly available once per day.'],
+            ['What is my Telenor answer today 2026?', 'The answer varies daily, and the official app is the final source. This page reports the latest known answers for convenience.'],
+            ['Can non-Telenor users take part?', 'Eligibility is controlled by Telenor and may vary based on your SIM status and account setup.'],
+            ['How many times can I play per day?', 'The quiz is usually available once per day, but the app may refresh or update the questions on a schedule.'],
+            ['Where can I find today&apos;s Telenor question answer?', 'You can usually find it in the My Telenor app under Play and Win or Test Your Skills, or you can use a verified guide like this page for reference.'],
             ['Is ToolNest affiliated with Telenor?', 'No. ToolNest is an independent informational website and is not endorsed or sponsored by Telenor Pakistan.']
           ]}
         />
