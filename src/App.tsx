@@ -928,25 +928,8 @@ function TelenorQuizPage() {
 }
 
 function AdSlot({ label }: { label: string }) {
-  useEffect(() => {
-    try {
-      // @ts-expect-error Google AdSense push
-      (window.adsbygoogle = window.adsbygoogle || []).push({})
-    } catch {
-      // ignore if adblocker or local dev
-    }
-  }, [])
-
   return (
-    <div className="ad-slot">
-      <ins
-        className="adsbygoogle"
-        style={{ display: 'block', width: '100%', height: '100%' }}
-        data-ad-client="ca-pub-2607800826981704"
-        data-ad-slot="auto"
-        data-ad-format="auto"
-        data-full-width-responsive="true"
-      />
+    <div className="ad-slot" aria-label={label}>
       <span style={{ position: 'absolute', opacity: 0.5 }}>{label}</span>
     </div>
   )
