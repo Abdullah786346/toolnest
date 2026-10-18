@@ -1,6 +1,13 @@
 {
   "routes": [
     { "handle": "filesystem" },
+    { "src": "^/(popular|about|contact|privacy|terms|disclaimer|sitemap)$", "dest": "/$1/index.html" },
+    { "src": "^/category/([^/]+)$", "dest": "/category/$1/index.html" },
+    { "src": "^/tools/([^/]+)$", "dest": "/tools/$1/index.html" },
+    { "src": "^/pakistan$", "dest": "/pakistan/index.html" },
+    { "src": "^/pakistan/(telenor|jazz|zong|ufone)$", "dest": "/pakistan/$1/index.html" },
+    { "src": "^/pakistan/telenor/quiz-today$", "dest": "/pakistan/telenor/quiz-today/index.html" },
+    { "src": "^/pakistan/(telenor|jazz|zong|ufone)/(balance-check|internet-mb-check|number-check|package-information|app-guides|codes|internet-settings|customer-support)$", "dest": "/pakistan/$1/$2/index.html" },
     { "src": "/.*", "dest": "/index.html" }
   ]
 }
