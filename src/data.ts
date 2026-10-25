@@ -1,5 +1,5 @@
 import {
-  Braces, Calculator, Code2, FileImage, FileText, Image, KeyRound, Languages, LockKeyhole, Percent, ScanText, Scale, ShieldCheck, Sparkles, TextCursorInput, Type, WandSparkles, Wifi, Palette, FileCode,
+  Braces, FileImage, FileText, Image, KeyRound, ScanText, Scale, ShieldCheck, Sparkles, TextCursorInput, Type, Wifi, Palette, FileCode,
 } from 'lucide-react'
 import type { ComponentType } from 'react'
 
@@ -15,11 +15,10 @@ export type Tool = {
 }
 
 export const categories = [
-  { name: 'PDF Tools', slug: 'pdf-tools', icon: FileText, count: 6, tone: 'coral' },
-  { name: 'Image Tools', slug: 'image-tools', icon: Image, count: 7, tone: 'cyan' },
-  { name: 'Text Tools', slug: 'text-tools', icon: Type, count: 7, tone: 'violet' },
-  { name: 'Calculator Tools', slug: 'calculator-tools', icon: Calculator, count: 6, tone: 'lime' },
-  { name: 'Developer Tools', slug: 'developer-tools', icon: Code2, count: 7, tone: 'blue' },
+  { name: 'PDF Tools', slug: 'pdf-tools', icon: FileText, count: 3, tone: 'coral' },
+  { name: 'Image Tools', slug: 'image-tools', icon: Image, count: 2, tone: 'cyan' },
+  { name: 'Text Tools', slug: 'text-tools', icon: Type, count: 5, tone: 'violet' },
+  { name: 'Developer Tools', slug: 'developer-tools', icon: Braces, count: 4, tone: 'blue' },
   { name: 'Pakistan Utilities', slug: 'pakistan', icon: Wifi, count: 32, tone: 'yellow' },
 ]
 
@@ -30,38 +29,19 @@ const tool = (name: string, slug: string, category: string, description: string,
 })
 
 export const tools: Tool[] = [
-  tool('PDF to PPT Converter', 'pdf-to-ppt', 'PDF Tools', 'Convert PDF to PPT online for free. Transform PDF documents into editable Microsoft PowerPoint presentations (.pptx) instantly in your browser.', FileText, true, 'PDF to PPT Converter - Free Online PDF to PowerPoint | ToolNest', 'Convert PDF to PPT online for free with ToolNest. Turn PDF files into editable Microsoft PowerPoint (PPT/PPTX) presentations instantly in your browser. Fast, secure, 100% free.'),
   tool('Image to Text Converter', 'image-to-text', 'Image Tools', 'Extract text from images online for free. Convert JPG, PNG, and photos into editable text with client-side OCR.', ScanText, true, 'Image to Text Converter Online Free - Extract Text from Image | ToolNest', 'Convert image to text online for free with ToolNest. Extract text from JPG, PNG, and photos instantly in your browser. 100% free OCR tool with no signup required.'),
   tool('PDF Compressor', 'pdf-compressor', 'PDF Tools', 'Reduce PDF file size while keeping documents easy to share.', FileText, true),
   tool('PDF Merger', 'pdf-merger', 'PDF Tools', 'Combine multiple PDF files into one organized document.', FileText),
-  tool('PDF Splitter', 'pdf-splitter', 'PDF Tools', 'Extract pages from a PDF with a simple browser workflow.', FileText),
-  tool('PDF to JPG', 'pdf-to-jpg', 'PDF Tools', 'Turn PDF pages into shareable JPG images.', FileImage),
   tool('JPG to PDF', 'jpg-to-pdf', 'PDF Tools', 'Convert JPG images into a clean PDF document.', FileImage),
   tool('Image Compressor', 'image-compressor', 'Image Tools', 'Compress images for faster websites and smaller uploads.', Image, true),
-  tool('Image Resizer', 'image-resizer', 'Image Tools', 'Resize images to exact dimensions in your browser.', ScanText),
-  tool('JPG to PNG', 'jpg-to-png', 'Image Tools', 'Convert JPG images to transparent-friendly PNG files.', FileImage),
-  tool('PNG to JPG', 'png-to-jpg', 'Image Tools', 'Convert PNG images into lightweight JPG files.', FileImage),
-  tool('WebP Converter', 'webp-converter', 'Image Tools', 'Convert common images to modern WebP format.', WandSparkles),
-  tool('Image Cropper', 'image-cropper', 'Image Tools', 'Crop images to the exact framing you need.', ScanText),
   tool('Word Counter', 'word-counter', 'Text Tools', 'Count words, characters, sentences, and reading time.', TextCursorInput, true),
-  tool('Character Counter', 'character-counter', 'Text Tools', 'Count characters with and without spaces.', TextCursorInput),
-  tool('Case Converter', 'case-converter', 'Text Tools', 'Switch text between uppercase, lowercase, title, and sentence case.', Languages),
   tool('Remove Duplicate Lines', 'remove-duplicate-lines', 'Text Tools', 'Clean repeated lines from lists and pasted text.', Sparkles),
   tool('Text Sorter', 'text-sorter', 'Text Tools', 'Sort lines alphabetically for cleaner lists.', Scale),
   tool('Lorem Ipsum Generator', 'lorem-ipsum-generator', 'Text Tools', 'Generate placeholder copy for designs and prototypes.', Type),
   tool('Markdown Editor & Preview', 'markdown-editor', 'Text Tools', 'Live Markdown editor with HTML preview and download options.', FileCode, true),
-  tool('Percentage Calculator', 'percentage-calculator', 'Calculator Tools', 'Calculate percentages, increases, decreases, and differences.', Percent, true, 'Percentage Calculator - Calculate Percentages & Change | ToolNest', 'Find a percentage, calculate percentage change, or work out increases and decreases with this free online percentage calculator.'),
-  tool('Age Calculator', 'age-calculator', 'Calculator Tools', 'Find an exact age from a date of birth.', Calculator, false, 'Age Calculator - Calculate Age in Years, Months & Days | ToolNest', 'Calculate your exact age from your date of birth in years, months, and days. See total days lived and your next birthday countdown.'),
-  tool('BMI Calculator', 'bmi-calculator', 'Calculator Tools', 'Calculate body mass index from height and weight.', Calculator, false, 'BMI Calculator - Calculate Body Mass Index Online | ToolNest', 'Calculate your BMI from metric or imperial height and weight. Get your body mass index and category with this free online BMI calculator.'),
-  tool('Discount Calculator', 'discount-calculator', 'Calculator Tools', 'Calculate sale prices and savings instantly.', Percent, false, 'Discount Calculator - Sale Price & Savings | ToolNest', 'Calculate a sale price, discount savings, and total after tax. Enter an original price and discount rate in this free online discount calculator.'),
-  tool('GST / Tax Calculator', 'gst-tax-calculator', 'Calculator Tools', 'Estimate tax-inclusive and tax-exclusive prices.', Calculator, false, 'GST Calculator - Calculate GST Inclusive & Exclusive | ToolNest', 'Calculate GST-inclusive or GST-exclusive prices with a custom tax rate. Use this free online GST and sales tax calculator for quick estimates.'),
-  tool('Loan Calculator', 'loan-calculator', 'Calculator Tools', 'Estimate monthly payments for a fixed-rate loan.', Calculator, false, 'Loan Calculator - Estimate Monthly EMI & Interest | ToolNest', 'Estimate your monthly loan EMI, total interest, and repayment amount from the principal, interest rate, and loan tenure.'),
   tool('JSON Formatter', 'json-formatter', 'Developer Tools', 'Format and inspect JSON data with readable indentation.', Braces, true),
   tool('JSON Validator', 'json-validator', 'Developer Tools', 'Check JSON syntax and get clear validation feedback.', ShieldCheck),
-  tool('Base64 Encoder / Decoder', 'base64-encoder-decoder', 'Developer Tools', 'Encode or decode Base64 text locally in your browser.', LockKeyhole),
-  tool('URL Encoder / Decoder', 'url-encoder-decoder', 'Developer Tools', 'Encode or decode URLs safely for web development.', Code2),
   tool('UUID Generator', 'uuid-generator', 'Developer Tools', 'Generate random UUIDs for apps, APIs, and databases.', KeyRound),
-  tool('Password Generator', 'password-generator', 'Developer Tools', 'Create strong random passwords with adjustable options.', ShieldCheck, true),
   tool('Color Code Converter', 'color-converter', 'Developer Tools', 'Convert colors between HEX, RGB, HSL, and CSS formats.', Palette),
 ]
 

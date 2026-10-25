@@ -4,7 +4,6 @@ import { ArrowRight, Check, ChevronDown, FileSearch, Menu, Moon, Search, ShieldC
 import { categories, providers, tools, type Tool } from './data'
 import { PROVIDERS, GUIDE_TYPES } from './data/pakistanGuidesData'
 import { ToolDispatcher } from './components/tools/ToolDispatcher'
-import { PdfToPptArticle } from './components/seo/PdfToPptArticle'
 import { ToolArticle } from './components/seo/ToolArticle'
 import { getToolFaqs } from './data/toolFaqs'
 import { ToastProvider } from './components/common/Toast'
@@ -69,7 +68,7 @@ function App() {
 
   // SEO & Dynamic Metadata Effect
   useEffect(() => {
-    const { title, description, keywords, currentTool, isPdfToPpt, isTelenorQuiz } = getPageMetadata(route, searchQueryParam)
+    const { title, description, keywords, currentTool, isTelenorQuiz } = getPageMetadata(route, searchQueryParam)
 
     document.title = title
 
@@ -124,7 +123,7 @@ function App() {
           description: description,
           isPartOf: { '@type': 'WebSite', name: 'ToolNest', url: `${SITE_URL}/` },
           ...(currentTool ? {
-            applicationCategory: isPdfToPpt ? 'BusinessApplication' : currentTool.category,
+            applicationCategory: currentTool.category,
             operatingSystem: 'All',
             offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
           } : {})
@@ -199,9 +198,9 @@ function App() {
             </Link>
             <nav className={`main-nav ${menu ? 'open' : ''}`}>
               <Link to="/">All Tools</Link>
-              <Link to="/tools/pdf-to-ppt">PDF to PPT</Link>
+              <Link to="/tools/image-to-text">Image to Text</Link>
               <Link to="/category/pdf-tools">PDF Tools</Link>
-              <Link to="/category/calculator-tools">Calculators</Link>
+              <Link to="/category/text-tools">Text Tools</Link>
               <Link to="/pakistan">Pakistan</Link>
               <Link to="/popular">Popular</Link>
               <Link to="/about">About</Link>
@@ -294,7 +293,7 @@ function SearchPage({ initialQuery }: { initialQuery: string }) {
       <div className="page-intro">
         <div className="eyebrow">SEARCH TOOLNEST</div>
         <h1>Search Results {query ? `for "${query}"` : ''}</h1>
-        <p>Explore tools, file converters, financial calculators, and Pakistan utility guides.</p>
+        <p>Explore online tools, file converters, and Pakistan utility guides.</p>
       </div>
 
       <form onSubmit={handleSearchSubmit} className="hero-search-wrap" style={{ margin: '0 0 24px', maxWidth: '100%' }}>
@@ -302,7 +301,7 @@ function SearchPage({ initialQuery }: { initialQuery: string }) {
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search for PDF to PPT, Image Compressor, Loan Calculator, Jazz Balance..."
+          placeholder="Search for Image to Text, Image Compressor, JSON Formatter, Jazz Balance..."
           aria-label="Search inputs"
         />
         {query && (
@@ -388,7 +387,7 @@ function PopularPage() {
       <div className="page-intro">
         <div className="eyebrow">POPULAR TOOLS</div>
         <h1>Start with the essentials</h1>
-        <p>Fast, fully functional browser tools for documents, images, code, and calculations.</p>
+        <p>Fast, fully functional browser tools for documents, images, text, and code.</p>
       </div>
       <div className="tool-grid">
         {tools.filter((tool) => tool.popular).map((tool) => (
@@ -422,9 +421,9 @@ function Home() {
         <div className="eyebrow">
           <span className="live-dot" /> Free online tools · 100% private · No registration required
         </div>
-        <h1>Free Online Tools for PDF to PPT, Images, Code & Calculations</h1>
+        <h1>Free Online Tools for Images, PDF, Text & Code</h1>
         <p className="hero-copy">
-          Convert PDF to PPT online for free with editable slides, compress images, count words, format JSON, and run financial calculators in seconds. Everything runs privately in your browser.
+          Extract text from images, compress files, merge PDFs, count words, and format JSON in seconds. Everything runs privately in your browser.
         </p>
 
         <form onSubmit={handleHeroSearch} className="hero-search-wrap">
@@ -432,7 +431,7 @@ function Home() {
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search 30+ tools (e.g. PDF to PPT, Image Compressor, JSON, Jazz Balance)..."
+            placeholder="Search tools (e.g. Image to Text, Image Compressor, JSON, Jazz Balance)..."
             aria-label="Search for a tool"
           />
           {query && (
@@ -471,16 +470,16 @@ function Home() {
       </div>
 
       <section className="section">
-        <SectionHeading eyebrow="FEATURED TOOL" title="Convert PDF to PowerPoint Presentation Online" />
+        <SectionHeading eyebrow="FEATURED TOOL" title="Extract Text from Images Online" />
         <div className="featured-guide" style={{ background: 'var(--green-light)', borderColor: '#bce1ce', padding: '24px 28px' }}>
           <div>
-            <strong style={{ fontSize: '18px', display: 'block', marginBottom: '6px' }}>PDF to PPT Converter (Free Online)</strong>
+            <strong style={{ fontSize: '18px', display: 'block', marginBottom: '6px' }}>Image to Text Converter (Free Online)</strong>
             <span style={{ fontSize: '15px', color: 'var(--muted)' }}>
-              Turn PDF documents into editable Microsoft PowerPoint (.pptx) slides with preserved hierarchy, custom themes, and instant download.
+              Extract editable text from JPG, PNG, and other images privately in your browser.
             </span>
           </div>
-          <Link to="/tools/pdf-to-ppt" className="button button-primary">
-            Convert PDF to PPT Now <ArrowRight size={16} />
+          <Link to="/tools/image-to-text" className="button button-primary">
+            Extract Text Now <ArrowRight size={16} />
           </Link>
         </div>
       </section>
@@ -533,7 +532,7 @@ function Home() {
         <FAQ items={[
           ['Are ToolNest tools really 100% free?', 'Yes. Every tool on ToolNest is free to use with no limits, hidden paywalls, or subscriptions.'],
           ['Do you upload my PDF or private files to any server?', 'No. Our browser-based tools process documents and images locally on your device for complete privacy.'],
-          ['Can I convert PDF to PPT on my mobile phone?', 'Yes. ToolNest works seamlessly on all modern mobile and desktop browsers including Chrome, Safari, and Edge.']
+          ['Can I extract text from images on my mobile phone?', 'Yes. ToolNest works seamlessly on modern mobile and desktop browsers including Chrome, Safari, and Edge.']
         ]} />
       </section>
     </>
@@ -636,8 +635,6 @@ function ToolPage({ slug }: { slug: string }) {
 
 function ToolContent({ tool }: { tool: Tool }) {
   const Icon = tool.icon
-  const isPdfToPpt = tool.slug === 'pdf-to-ppt'
-
   return (
     <div className="page-wrap tool-page">
       <nav className="breadcrumbs" aria-label="Breadcrumb">
@@ -667,7 +664,7 @@ function ToolContent({ tool }: { tool: Tool }) {
           <ToolFeedback toolSlug={tool.slug} toolName={tool.name} />
 
           {/* SEO Rich article content */}
-          {isPdfToPpt ? <PdfToPptArticle /> : <ToolArticle tool={tool} />}
+          <ToolArticle tool={tool} />
         </article>
 
         <aside>
@@ -921,10 +918,10 @@ function Footer() {
         <div className="footer-links">
           <div>
             <strong>Top Tools</strong>
-            <Link to="/tools/pdf-to-ppt">PDF to PPT Converter</Link>
+            <Link to="/tools/image-to-text">Image to Text Converter</Link>
             <Link to="/tools/image-compressor">Image Compressor</Link>
             <Link to="/tools/word-counter">Word Counter</Link>
-            <Link to="/tools/percentage-calculator">Percentage Calculator</Link>
+            <Link to="/tools/json-formatter">JSON Formatter</Link>
           </div>
           <div>
             <strong>Categories</strong>
