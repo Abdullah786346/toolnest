@@ -100,7 +100,7 @@ export function CommandPalette({ isOpen, onClose }: { isOpen: boolean; onClose: 
               setQuery(e.target.value)
               setSelectedIndex(0)
             }}
-            placeholder="Search 30+ tools, converters, calculators, Pakistan guides..."
+            placeholder="Search tools, converters, and Pakistan guides..."
             aria-label="Search command palette"
           />
           {query && (

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Copy, Check, RefreshCw } from 'lucide-react'
 
 export function WordCounterTool() {
-  const [text, setText] = useState('ToolNest provides free, fast, and secure online tools for everyday work. Convert PDF documents, format code, compress images, and run calculators with total privacy.')
+  const [text, setText] = useState('ToolNest provides free, fast, and secure online tools for everyday work. Merge and compress PDFs, extract text from images, format code, and count words with total privacy.')
   const [copied, setCopied] = useState(false)
 
   const words = text.trim() ? text.trim().split(/\s+/).length : 0
