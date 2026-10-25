@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Copy, Check, RefreshCw, ShieldCheck, AlertTriangle } from 'lucide-react'
 
 export function JsonFormatterTool() {
-  const [input, setInput] = useState('{\n  "name": "ToolNest",\n  "tools": 33,\n  "features": ["PDF", "PPT", "Images", "Calculators"],\n  "active": true\n}')
+  const [input, setInput] = useState('{\n  "name": "ToolNest",\n  "tools": 14,\n  "features": ["PDF", "Images", "Text", "Developer"],\n  "active": true\n}')
   const [output, setOutput] = useState('')
   const [error, setError] = useState('')
   const [copied, setCopied] = useState(false)
@@ -473,7 +473,7 @@ export function Base64Tool() {
 }
 
 export function UrlEncoderTool() {
-  const [input, setInput] = useState('https://www.onlinetoolnest.tech/tools/pdf-to-ppt?source=google&query=pdf to ppt converter')
+  const [input, setInput] = useState('https://www.onlinetoolnest.tech/tools/json-formatter?source=google&query=free online tool')
   const [output, setOutput] = useState('')
   const [mode, setMode] = useState<'encode' | 'decode'>('encode')
   const [copied, setCopied] = useState(false)

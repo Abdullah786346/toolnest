@@ -155,7 +155,7 @@ export function PrivacyPolicyPage() {
       <div className="article-content">
         <h2>1. Client-Side Processing Privacy Guarantee</h2>
         <p>
-          ToolNest provides web-based productivity tools including PDF to PPT converters, image compressors, word counters, code formatters, and calculators. All file transformations and data processing occur strictly inside your web browser (client-side) using HTML5 APIs, WebAssembly, and JavaScript. <strong>We do not upload, collect, store, or inspect your documents, images, or input text on any server.</strong>
+          ToolNest provides web-based productivity tools including PDF utilities, image compressors, text utilities, and code formatters. All file transformations and data processing occur strictly inside your web browser (client-side) using HTML5 APIs, WebAssembly, and JavaScript. <strong>We do not upload, collect, store, or inspect your documents, images, or input text on any server.</strong>
         </p>
 
         <h2>2. Log Files</h2>
@@ -326,7 +326,7 @@ export function DisclaimerPage() {
 
         <h2>3. Tool Output Disclaimer</h2>
         <p>
-          Calculators, converters, and formatters are provided for convenience. Users should verify critical calculations (such as financial loans or tax estimates) prior to executing transactions.
+          Converters and formatters are provided for convenience. Users should verify important results before relying on them.
         </p>
       </div>
     </div>

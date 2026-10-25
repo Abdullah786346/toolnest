@@ -1,4 +1,3 @@
-import { PdfToPptTool } from './PdfToPptTool'
 import { PdfCompressorTool, PdfMergerTool, PdfSplitterTool, JpgToPdfTool } from './PdfTools'
 import { ImageCompressorTool, ImageResizerTool, FormatConverterTool, ImageToTextTool } from './ImageTools'
 import { PercentageCalculatorTool, AgeCalculatorTool, BmiCalculatorTool, DiscountCalculatorTool, GstCalculatorTool, LoanCalculatorTool } from './CalculatorTools'
@@ -10,8 +9,6 @@ import type { Tool } from '../../data'
 
 export function ToolDispatcher({ tool }: { tool: Tool }) {
   switch (tool.slug) {
-    case 'pdf-to-ppt':
-      return <PdfToPptTool />
     case 'pdf-compressor':
       return <PdfCompressorTool />
     case 'pdf-merger':
