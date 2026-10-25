@@ -10,21 +10,16 @@ export function getPageMetadata(route: string, searchQueryParam = '') {
   const isPakistanSpecificGuide = (parts[0] === 'pakistan' && parts[1] && parts[1] !== 'telenor') ||
     (parts[1] === 'telenor' && parts[2] !== 'quiz-today' && parts.length === 3)
   const isTelenorQuiz = route === '/pakistan/telenor/quiz-today'
-  const isPdfToPpt = currentTool?.slug === 'pdf-to-ppt'
   const isImageToText = currentTool?.slug === 'image-to-text'
   const isSearchRoute = route === '/search' || Boolean(searchQueryParam)
 
-  let title = 'ToolNest | Free Online Tools, PDF to PPT & Utility Guides'
-  let description = 'Free online tools for PDF to PPT converter, image to text converter, image compressor, word counter, percentage calculator, and developer tasks, plus Pakistan utility guides.'
-  let keywords = 'image to text, image to text converter, pdf to ppt, free online tools, pdf tools, image compressor, word counter, json formatter, percentage calculator'
+  let title = 'ToolNest | Free Online Tools & Pakistan Utility Guides'
+  let description = 'Free online image, PDF, text, and developer tools, plus Pakistan utility guides for telecom services.'
+  let keywords = 'free online tools, image to text, image compressor, pdf compressor, pdf merger, jpg to pdf, word counter, text sorter, json formatter, json validator'
 
   if (isSearchRoute) {
     title = `Search Results for "${searchQueryParam}" | ToolNest`
-    description = `Find free online tools, converters, calculators, and Pakistan utility guides matching "${searchQueryParam}" on ToolNest.`
-  } else if (isPdfToPpt) {
-    title = 'PDF to PPT Converter - Free Online PDF to PowerPoint | ToolNest'
-    description = 'Convert PDF to PPT online for free with ToolNest. Turn PDF documents into editable Microsoft PowerPoint (PPT/PPTX) presentations instantly in your browser.'
-    keywords = 'pdf to ppt, pdf to ppt converter, convert pdf to ppt, pdf to powerpoint, pdf to pptx, free pdf to ppt converter'
+    description = `Find free online tools and Pakistan utility guides matching "${searchQueryParam}" on ToolNest.`
   } else if (isImageToText) {
     title = 'Image to Text Converter Online Free - Extract Text from Image | ToolNest'
     description = 'Convert image to text online for free with ToolNest. Extract text from JPG, PNG, WebP, and photos instantly in your browser. 100% free OCR tool with no signup required.'
@@ -48,7 +43,7 @@ export function getPageMetadata(route: string, searchQueryParam = '') {
     description = `Useful telecom guides for ${providerName} balance checks, internet MBs, SIM ownership, and USSD codes.`
   } else if (route === '/popular') {
     title = 'Popular Free Online Tools | ToolNest'
-    description = 'Use ToolNest popular free online tools for PDF to PPT, text, image, calculator, and developer tasks.'
+    description = 'Explore popular free online tools for images, text, PDFs, and developer tasks.'
   } else if (route === '/about') {
     title = 'About ToolNest - Fast, Private Online Utilities'
     description = 'ToolNest is an independent digital toolbox providing high-performance browser utilities and verified Pakistan telecom guides.'
@@ -66,8 +61,8 @@ export function getPageMetadata(route: string, searchQueryParam = '') {
     description = 'ToolNest legal disclaimer regarding telecom guides and browser-based utility tools.'
   } else if (route === '/sitemap') {
     title = 'HTML Sitemap | ToolNest'
-    description = 'Complete directory of all 70+ online tools, categories, and Pakistan utility guides on ToolNest.'
+    description = 'Browse all free online tools, categories, and Pakistan utility guides on ToolNest.'
   }
 
-  return { title, description, keywords, currentTool, isPdfToPpt, isTelenorQuiz }
+  return { title, description, keywords, currentTool, isTelenorQuiz }
 }
