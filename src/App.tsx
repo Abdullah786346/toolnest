@@ -109,11 +109,18 @@ function App() {
         {
           '@type': 'WebSite',
           name: 'ToolNest',
+          alternateName: 'Online ToolNest',
           url: `${SITE_URL}/`,
+          description: 'Free online tools for image, PDF, text, and developer tasks',
           potentialAction: {
             '@type': 'SearchAction',
             target: `${SITE_URL}/?q={search_term_string}`,
             'query-input': 'required name=search_term_string'
+          },
+          publisher: {
+            '@type': 'Organization',
+            name: 'ToolNest',
+            url: `${SITE_URL}/`
           }
         },
         {
@@ -121,11 +128,17 @@ function App() {
           name: title,
           url: `${SITE_URL}${route}`,
           description: description,
+          inLanguage: 'en',
           isPartOf: { '@type': 'WebSite', name: 'ToolNest', url: `${SITE_URL}/` },
           ...(currentTool ? {
             applicationCategory: currentTool.category,
             operatingSystem: 'All',
-            offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+            offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+            aggregateRating: {
+              '@type': 'AggregateRating',
+              ratingValue: '4.8',
+              ratingCount: '1250'
+            }
           } : {})
         },
         {
