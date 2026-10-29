@@ -1,3 +1,12 @@
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /admin/
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
 Sitemap: https://www.onlinetoolnest.tech/sitemap.xml
